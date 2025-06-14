@@ -16,7 +16,7 @@ mv -f config/boards/nanopct4.csc config/boards/nanopct4.conf
 # 5C Patches
 echo "Copying 5C patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/5C/rock-5c.conf config/boards/
-cp -f ${GITHUB_WORKSPACE}/patch/5C/reopen_disabled_nodes.patch patch/u-boot/legacy/u-boot-radxa-rk35xx/board_rock-5c/
+# cp -f ${GITHUB_WORKSPACE}/patch/5C/reopen_disabled_nodes.patch patch/u-boot/legacy/u-boot-radxa-rk35xx/board_rock-5c/
 cp -f ${GITHUB_WORKSPACE}/patch/5C/fix-CPU-information.patch patch/kernel/rk35xx-vendor-6.1/
 cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan.patch patch/kernel/rk35xx-vendor-6.1/
 
