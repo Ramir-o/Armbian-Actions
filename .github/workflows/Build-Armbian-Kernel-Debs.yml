@@ -75,7 +75,7 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  build-armbian:
+  Build-Armbian:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Checkout
