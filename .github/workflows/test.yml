@@ -114,8 +114,8 @@ jobs:
       - name: Apply patches
         run: |
           cd "${GITHUB_WORKSPACE}/build"
-          chmod +x "${GITHUB_WORKSPACE}/scripts/apply_patches.sh"
           "${GITHUB_WORKSPACE}/scripts/apply_patches.sh"
+          "${GITHUB_WORKSPACE}/scripts/rename_to_conf.sh"
           sed -i 's|6\.15|6.16|g' config/sources/families/include/meson64_common.inc
           sed -i 's|tag:v6\.16-rc[1-7]|tag:v6.16-rc2|' config/sources/mainline-kernel.conf.sh
           sed -i 's|https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git|https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git|' lib/functions/configuration/main-config.sh
@@ -188,7 +188,6 @@ jobs:
       - name: Prepare SHA256 Metadata
         run: |
           cd "${GITHUB_WORKSPACE}/build/output/"
-          chmod +x "${GITHUB_WORKSPACE}/scripts/sha256.sh"
           sleep 15 && "${GITHUB_WORKSPACE}/scripts/sha256.sh"
           ls -la
 
