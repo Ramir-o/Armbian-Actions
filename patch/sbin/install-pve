@@ -90,7 +90,7 @@ fi
 
 # CIDR 转换为子网掩码
 cidr_to_netmask() {
-  local cidr=$1
+  local cidr=${1}
   if [[ -z "${cidr}" || "${cidr}" -le 0 || "${cidr}" -gt 32 ]]; then
     echo -e "${ERROR} 子网掩码位数无效！"
     exit 1
