@@ -5,7 +5,6 @@ set -e
 STEPS="[\033[95m 步骤 \033[0m]"
 INFO="[\033[94m 信息 \033[0m]"
 SUCCESS="[\033[92m 成功 \033[0m]"
-OPTIONS="[\033[93m 选项 \033[0m]"
 ERROR="[\033[91m 错误 \033[0m]"
 
 # ========= 创建临时目录并清理 =========
@@ -17,7 +16,7 @@ trap cleanup EXIT
 cd "$TMPDIR"
 
 # ========= 标题 =========
-echo -e "${INFO} Armbian (ARM64) 安装 Proxmox VE"
+echo -e "${INFO} Armbian (ARM64) 安装 Pxvirt (Proxmox VE)"
 echo -e "${INFO} 临时目录 [\033[92m ${TMPDIR} \033[0m]"
 
 # ========= 下载文件 =========

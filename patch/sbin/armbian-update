@@ -16,7 +16,7 @@ release_file="/etc/armbian-release"
 GITHUB_REPO="Zane-E"
 
 # 定义内核主版本
-VERSION_PREFIXES="6.1 6.12 6.16 6.17 6.18"
+VERSION_PREFIXES="6.1 6.12 6.17 6.18"
 
 # 定义最新版本数量
 VERSION_TOP="5"

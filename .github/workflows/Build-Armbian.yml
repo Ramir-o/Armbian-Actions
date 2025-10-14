@@ -69,8 +69,6 @@ on:
         options:
           - 'ubuntu:jammy'
           - 'ubuntu:noble'
-          - 'debian:bookworm'
-          - 'debian:trixie'
       UPLOAD_DEB_PACKAGES:
         description: 'Upload deb packages'
         default: 'no'
@@ -158,7 +156,7 @@ jobs:
       - name: Prepare Image Metadata
         run: |
           cd "${GITHUB_WORKSPACE}/build/output/images/"
-          Image_File=$(find . -maxdepth 1 -type f -name 'Armbian_*.img.xz' -printf '%f\n' | head -n 1)
+          Image_File=$(find . -maxdepth 1 -type f -name 'Armbian*.img.xz' -printf '%f\n' | head -n 1)
           [ -z "${Image_File}" ] && { echo "No image files found."; exit 1; }
           echo "Image_File: ${Image_File}"
           VERSION=$(echo "${Image_File}" | cut -d '_' -f 2)
