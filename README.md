@@ -70,7 +70,7 @@
 1. Fork 本仓库
 2. 编辑 **Build-Armbian.yml**，添加所需设备
 3. 触发 GitHub Actions 工作流，等待构建完成
-   - **APPLY_PATCHES** 选项用于应用仓库中的补丁，若不启用，则生成官方原版固件
+   - **Apply patches** 选项用于应用仓库中的补丁，若不启用，则生成官方原版固件
 4. 在 Releases 页面下载构建好的固件
 
 ---
