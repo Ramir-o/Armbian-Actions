@@ -157,7 +157,7 @@ jobs:
         working-directory: /mnt/workdir/build/output/images
         run: |
           Image_File=$(find . -maxdepth 1 -type f -name 'Armbian*.img.xz' -printf '%f\n' | head -n 1)
-          [ -z "${Image_File}" ] && { echo "No image files found."; exit 1; }
+          [ -z "${Image_File}" ] && { echo "No image files found."; tree; exit 1; }
           echo "Image_File: ${Image_File}"
           VERSION=$(echo "${Image_File}" | cut -d '_' -f 2)
           echo "VERSION=${VERSION}" >> ${GITHUB_ENV}
@@ -201,7 +201,7 @@ jobs:
 
           else
             echo "No matching file found. Available files are:"
-            ls -1 "${GITHUB_WORKSPACE}/build/output/debs/"
+            ls -1 "/mnt/workdir/build/output/debs"
             exit 1
           fi
 
