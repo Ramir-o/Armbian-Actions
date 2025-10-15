@@ -77,6 +77,14 @@ on:
         options:
           - 'yes'
           - 'no'
+      APPLY_PATCHES:
+        description: 'Apply patches'
+        default: 'yes'
+        required: false
+        type: choice
+        options:
+          - 'yes'
+          - 'no'
 
 env:
   TZ: Asia/Shanghai
@@ -137,6 +145,7 @@ jobs:
           ln -sf /mnt/workdir/build ${GITHUB_WORKSPACE}/build
 
       - name: Apply patches
+        if: ${{ inputs.APPLY_PATCHES == 'yes' }}
         working-directory: /mnt/workdir/build
         run: |
           "${GITHUB_WORKSPACE}/scripts/apply_patches.sh"
