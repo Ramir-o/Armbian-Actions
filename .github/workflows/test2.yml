@@ -180,7 +180,6 @@ jobs:
         working-directory: /mnt/workdir/build/output/debs
         run: |
           Kernel_File=$(find . -maxdepth 1 -type f -name 'linux-image-*.deb' -printf '%f\n' | head -n 1)
-
           if [ -n "${Kernel_File}" ]; then
             echo "Kernel_File: ${Kernel_File}"
             KERNEL_VERSION=$(echo "${Kernel_File}" | cut -d '_' -f 5 | cut -d '-' -f 1)
@@ -195,9 +194,7 @@ jobs:
             ls -1 "/mnt/workdir/build/output/debs"
             exit 1
           fi
-
           matching_files_array=($(ls linux-dtb* linux-headers* linux-image* linux-libc* 2>/dev/null))
-
           if [ ${#matching_files_array[@]} -gt 0 ]; then
             renamed_files=()
             for f in "${matching_files_array[@]}"; do
@@ -215,7 +212,6 @@ jobs:
             ls -1 "/mnt/workdir/build/output/debs"
             exit 1
           fi
-
           tar -tzf "../kernel-${KERNEL_VERSION}-${LINUX_FAMILY}.tar.gz" || { echo "Failed to verify tar.gz file"; exit 1; }
 
       - name: Upload Kernel to Release
