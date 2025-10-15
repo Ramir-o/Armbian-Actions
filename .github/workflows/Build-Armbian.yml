@@ -63,7 +63,7 @@ on:
           - 'no'
       DOCKER_ARMBIAN_BASE_IMAGE:
         description: 'Docker base image'
-        default: 'ubuntu:jammy'
+        default: 'ubuntu:noble'
         required: false
         type: choice
         options:
@@ -97,7 +97,7 @@ jobs:
         run: |
           docker_images_ids=$(docker images -q)
           [ -n "${docker_images_ids}" ] && docker rmi ${docker_images_ids}
-          docker image prune -a -f
+          docker system prune -a -f
           [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android 2>/dev/null
           sudo swapoff -a
@@ -117,11 +117,11 @@ jobs:
           root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
           sudo truncate -s "${mnt_size}"G /mnt/mnt.img
           sudo truncate -s "${root_size}"G /root.img
-          sudo losetup /dev/loop6 /mnt/mnt.img
-          sudo losetup /dev/loop7 /root.img
-          sudo pvcreate /dev/loop6
-          sudo pvcreate /dev/loop7
-          sudo vgcreate github /dev/loop6 /dev/loop7
+          LOOP_MNT=$(sudo losetup -f --show /mnt/mnt.img)
+          LOOP_ROOT=$(sudo losetup -f --show /root.img)
+          sudo pvcreate "${LOOP_MNT}"
+          sudo pvcreate "${LOOP_ROOT}"
+          sudo vgcreate -y github "${LOOP_MNT}" "${LOOP_ROOT}"
           sudo lvcreate -n runner -l 100%FREE github
           sudo mkfs.xfs /dev/github/runner
           sudo mkdir -p /mnt/workdir
@@ -137,15 +137,15 @@ jobs:
           ln -sf /mnt/workdir/build ${GITHUB_WORKSPACE}/build
 
       - name: Apply patches
+        working-directory: /mnt/workdir/build
         run: |
-          cd "${GITHUB_WORKSPACE}/build"
           "${GITHUB_WORKSPACE}/scripts/apply_patches.sh"
           "${GITHUB_WORKSPACE}/scripts/rename_to_conf.sh"
           ls -la
 
       - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.BRANCH }} ${{ inputs.RELEASE }} ]
+        working-directory: /mnt/workdir/build
         run: |
-          cd "${GITHUB_WORKSPACE}/build/"
           ./compile.sh build BOARD=${{ inputs.BOARD }} BRANCH=${{ inputs.BRANCH }} RELEASE=${{ inputs.RELEASE }} BUILD_MINIMAL=${{ inputs.BUILD_MINIMAL }} BUILD_DESKTOP=${{ inputs.BUILD_DESKTOP }} \
             PREFER_DOCKER=${{ inputs.PREFER_DOCKER }} DOCKER_ARMBIAN_BASE_IMAGE=${{ inputs.DOCKER_ARMBIAN_BASE_IMAGE }} COMPRESS_OUTPUTIMAGE=xz KERNEL_CONFIGURE=no DEB_COMPRESS=xz
 
@@ -154,8 +154,8 @@ jobs:
           echo "CURRENT_YEAR_MONTH=$(date +'%Y.%m')" >> ${GITHUB_ENV}
 
       - name: Prepare Image Metadata
+        working-directory: /mnt/workdir/build/output/images
         run: |
-          cd "${GITHUB_WORKSPACE}/build/output/images/"
           Image_File=$(find . -maxdepth 1 -type f -name 'Armbian*.img.xz' -printf '%f\n' | head -n 1)
           [ -z "${Image_File}" ] && { echo "No image files found."; exit 1; }
           echo "Image_File: ${Image_File}"
@@ -168,7 +168,7 @@ jobs:
         with:
           tag: "Armbian-${{ inputs.RELEASE }}-${{ env.CURRENT_YEAR_MONTH }}"
           name: "Armbian-${{ inputs.RELEASE }}-${{ env.CURRENT_YEAR_MONTH }}"
-          artifacts: "${{ github.workspace }}/build/output/images/*"
+          artifacts: "/mnt/workdir/build/output/images/*"
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
@@ -184,8 +184,8 @@ jobs:
 
       - name: Prepare Debs Metadata
         if: ${{ inputs.UPLOAD_DEB_PACKAGES == 'yes' }}
+        working-directory: /mnt/workdir/build/output/debs
         run: |
-          cd "${GITHUB_WORKSPACE}/build/output/debs/"
           [ -d "extra/${{ inputs.RELEASE }}-utils" ] && mv extra/${{ inputs.RELEASE }}-utils/* ./ && rm -rf extra
           Kernel_File=$(find . -maxdepth 1 -type f -name 'linux-image-*.deb' -printf '%f\n' | head -n 1)
 
@@ -216,7 +216,7 @@ jobs:
         with:
           tag: "Armbian-Debs"
           name: "Armbian-Debs"
-          artifacts: "${{ github.workspace }}/build/output/${{ env.VERSION }}_${{ inputs.BOARD }}_${{ inputs.RELEASE }}_${{ inputs.BRANCH }}.tar.gz"
+          artifacts: "/mnt/workdir/build/output/${{ env.VERSION }}_${{ inputs.BOARD }}_${{ inputs.RELEASE }}_${{ inputs.BRANCH }}.tar.gz"
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
@@ -230,8 +230,8 @@ jobs:
 
       - name: Prepare Kernel Metadata
         if: ${{ inputs.UPLOAD_DEB_PACKAGES == 'yes' }}
+        working-directory: /mnt/workdir/build/output/debs
         run: |
-          cd "${GITHUB_WORKSPACE}/build/output/debs/"
           matching_files_array=($(ls linux-dtb* linux-headers* linux-image* linux-libc* 2>/dev/null))
 
           if [ ${#matching_files_array[@]} -gt 0 ]; then
@@ -259,7 +259,7 @@ jobs:
         with:
           tag: "Kernel-${{ env.LINUX_FAMILY }}"
           name: "Kernel-${{ env.LINUX_FAMILY }}"
-          artifacts: "${{ github.workspace }}/build/output/kernel-${{ env.KERNEL_VERSION }}-${{ env.LINUX_FAMILY }}.tar.gz"
+          artifacts: "/mnt/workdir/build/output/kernel-${{ env.KERNEL_VERSION }}-${{ env.LINUX_FAMILY }}.tar.gz"
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
@@ -273,8 +273,8 @@ jobs:
 
       - name: Prepare SHA256 Metadata
         if: ${{ inputs.UPLOAD_DEB_PACKAGES == 'yes' }}
+        working-directory: /mnt/workdir/build/output
         run: |
-          cd "${GITHUB_WORKSPACE}/build/output/"
           sleep 15 && "${GITHUB_WORKSPACE}/scripts/sha256.sh"
           ls -la
 
@@ -284,7 +284,7 @@ jobs:
         with:
           tag: "Kernel-${{ env.LINUX_FAMILY }}"
           name: "Kernel-${{ env.LINUX_FAMILY }}"
-          artifacts: "${{ github.workspace }}/build/output/sha256.txt"
+          artifacts: "/mnt/workdir/build/output/sha256.txt"
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
