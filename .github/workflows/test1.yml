@@ -174,7 +174,7 @@ jobs:
             echo "LINUX_FAMILY: ${LINUX_FAMILY}"
           else
             echo "No matching file found. Available files are:"
-            ls -1 "${GITHUB_WORKSPACE}/build/output/debs/"
+            ls -1 "/mnt/workdir/build/output/debs"
             exit 1
           fi
 
@@ -194,6 +194,7 @@ jobs:
             echo "Compressed matching files to kernel-${KERNEL_VERSION}-${LINUX_FAMILY}.tar.gz"
           else
             echo "No matching files found for compression."
+            ls -1 "/mnt/workdir/build/output/debs"
             exit 1
           fi
 

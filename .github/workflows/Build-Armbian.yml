@@ -248,6 +248,7 @@ jobs:
             echo "Compressed matching files to kernel-${{ env.KERNEL_VERSION }}-${{ env.LINUX_FAMILY }}.tar.gz"
           else
             echo "No matching files found for compression."
+            ls -1 "/mnt/workdir/build/output/debs"
             exit 1
           fi
 
