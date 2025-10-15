@@ -168,7 +168,7 @@ jobs:
             [[ ! "${KERNEL_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] && KERNEL_VERSION="${KERNEL_VERSION}.0"
             echo "KERNEL_VERSION=${KERNEL_VERSION}" >> ${GITHUB_ENV}
             echo "KERNEL_VERSION: ${KERNEL_VERSION}"
-            LINUX_FAMILY=$(echo "${Kernel_File}" | cut -d '-' -f 3 | cut -d '_' -f 1)
+            LINUX_FAMILY=$(echo "${Kernel_File}" | cut -d '_' -f 1 | awk -F '-' '{print $NF}')
             echo "LINUX_FAMILY=${LINUX_FAMILY}" >> ${GITHUB_ENV}
             echo "LINUX_FAMILY: ${LINUX_FAMILY}"
           else
