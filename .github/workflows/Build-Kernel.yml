@@ -194,7 +194,7 @@ jobs:
         with:
           tag: "Kernel-${{ env.LINUX_FAMILY }}"
           name: "Kernel-${{ env.LINUX_FAMILY }}"
-          artifacts: "/mnt/workdir/build/output/${LINUXFAMILY}-sha256.txt"
+          artifacts: "/mnt/workdir/build/output/${{ env.LINUX_FAMILY }}}-sha256.txt"
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
