@@ -28,8 +28,8 @@ fetch_and_extract() {
 }
 
 echo "🔍 正在提取内核文件 SHA256 信息"
-if fetch_and_extract | sort -t '-' -k2V -u > sha256.txt; then
-    echo "✅ 提取完成，已保存到 sha256.txt"
+if fetch_and_extract | sort -t '-' -k2V -u > "${LINUXFAMILY}-sha256.txt"; then
+    echo "✅ 提取完成，已保存到 ${LINUXFAMILY}-sha256.txt"
 else
     echo "❌ 提取失败！"
 fi
