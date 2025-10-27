@@ -187,7 +187,7 @@ select_mirror_site() {
         fi
         exit 0
         ;;
-    1) MIRROR_URL="mirrors.cernet.edu.cn" ;;        # 高校联合 • 自动选择
+    1) MIRROR_URL="mirrors.cernet.edu.cn" ;;        # 高校联合•自动选择
     2) MIRROR_URL="mirrors.ustc.edu.cn" ;;          # 中国科学技术大学
     3) MIRROR_URL="mirrors.bfsu.edu.cn" ;;          # 北京外国语大学
     4) MIRROR_URL="mirrors.tuna.tsinghua.edu.cn" ;; # 清华大学
