@@ -27,7 +27,7 @@ fetch_and_extract() {
     echo "${html}" | extract_all_versions_with_sha
 }
 
-echo "🔍 正在提取内核文件 SHA256 信息..."
+echo "🔍 正在提取内核文件 SHA256 信息"
 if fetch_and_extract | sort -t '-' -k2V -u > sha256.txt; then
     total=$(wc -l < sha256.txt | tr -d ' ')
     if [[ "${total}" -gt 0 ]]; then
