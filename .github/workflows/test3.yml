@@ -113,8 +113,6 @@ jobs:
           sed -i 's|rkr5\.1|rkr6.1|' config/sources/families/rk35xx.conf
           sed -i 's|rkr5\.1|rkr6.1|' config/sources/families/rockchip-rk3588.conf
           sed -i 's|rkr5\.1|rkr6.1|' patch/kernel/rk35xx-vendor-6.1/0000.patching_config.yaml
-          sed -i 's|v6\.1\.99|v6.1.118|' patch/kernel/rk35xx-vendor-6.1/0000.patching_config.yaml
-          cp -f ${GITHUB_WORKSPACE}/patch/test/rk3568-evb.patch patch/kernel/rk35xx-vendor-6.1/
           ls -la
 
       - name: Compile Kernel [ ${{ inputs.LinuxFamily }} ${{ inputs.BRANCH }} ]
