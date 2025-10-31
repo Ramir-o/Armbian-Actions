@@ -142,14 +142,14 @@ jobs:
         run: |
           df -hT ${PWD}
           git clone -q --single-branch --depth=1 --branch=main https://github.com/armbian/build.git build
-          ln -sf /mnt/workdir/build ${GITHUB_WORKSPACE}/build
+          ln -sf /mnt/workdir/build ${{ github.workspace }}/build
 
       - name: Apply patches
         if: ${{ inputs.APPLY_PATCHES == 'yes' }}
         working-directory: /mnt/workdir/build
         run: |
-          "${GITHUB_WORKSPACE}/scripts/apply_patches.sh"
-          "${GITHUB_WORKSPACE}/scripts/rename_to_conf.sh"
+          "${{ github.workspace }}/scripts/apply_patches.sh"
+          "${{ github.workspace }}/scripts/rename_to_conf.sh"
           ls -la
 
       - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.BRANCH }} ${{ inputs.RELEASE }} ]
@@ -280,7 +280,7 @@ jobs:
         if: ${{ inputs.UPLOAD_DEB_PACKAGES == 'yes' }}
         working-directory: /mnt/workdir/build/output
         run: |
-          sleep 15 && "${GITHUB_WORKSPACE}/scripts/sha256.sh"
+          sleep 15 && "${{ github.workspace }}/scripts/sha256.sh"
           ls -la
 
       - name: Upload SHA256 to Release
