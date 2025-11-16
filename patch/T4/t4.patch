@@ -42,3 +42,17 @@
  			hysteresis = <2000>;
  			type = "active";
  		};
+
+--- a/arch/arm64/boot/dts/rockchip/rk3399-op1.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-op1.dtsi
+@@ -39,6 +39,10 @@
+ 			opp-hz = /bits/ 64 <1512000000>;
+ 			opp-microvolt = <1150000>;
+ 		};
++		opp07 {
++			opp-hz = /bits/ 64 <1608000000>;
++			opp-microvolt = <1200000>;
++		};
+ 	};
+
+ 	cluster1_opp: opp-table-1 {
