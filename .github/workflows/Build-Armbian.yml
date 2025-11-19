@@ -157,10 +157,6 @@ jobs:
           ./compile.sh build BOARD=${{ inputs.BOARD }} BRANCH=${{ inputs.BRANCH }} RELEASE=${{ inputs.RELEASE }} BUILD_MINIMAL=${{ inputs.BUILD_MINIMAL }} BUILD_DESKTOP=${{ inputs.BUILD_DESKTOP }} \
             PREFER_DOCKER=${{ inputs.PREFER_DOCKER }} DOCKER_ARMBIAN_BASE_IMAGE=${{ inputs.DOCKER_ARMBIAN_BASE_IMAGE }} COMPRESS_OUTPUTIMAGE=xz KERNEL_CONFIGURE=no DEB_COMPRESS=xz
 
-      - name: Set current year and month
-        run: |
-          echo "CURRENT_YEAR_MONTH=$(date +'%Y.%m')" >> ${GITHUB_ENV}
-
       - name: Prepare Image Metadata
         working-directory: /mnt/workdir/build/output/images
         run: |
@@ -170,6 +166,8 @@ jobs:
           VERSION=$(echo "${Image_File}" | cut -d '_' -f 2 | cut -d '-' -f 1)
           echo "VERSION=${VERSION}" >> ${GITHUB_ENV}
           echo "VERSION: ${VERSION}"
+          echo "CURRENT_YEAR_MONTH=$(date +'%Y.%m')" >> ${GITHUB_ENV}
+          echo "CURRENT_YEAR_MONTH: $(date +'%Y.%m')"
 
       - name: Upload Image to Release
         uses: ncipollo/release-action@main
