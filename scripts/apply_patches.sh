@@ -31,6 +31,9 @@ cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-1.patch patch/kernel/archive/meson64-6
 cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-2.patch patch/kernel/archive/meson64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/N1/u-boot.ext config/optional/boards/aml-s9xx-box/_packages/bsp-cli/boot/
 
+# OneCloud Patches
+cp -f ${GITHUB_WORKSPACE}/patch/test/onecloud-0001-add-dts.patch patch/kernel/archive/meson-6.12/
+
 # X2 Patches
 echo "Copying X2 patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/X2/rk3566-panther-x2.dts patch/kernel/archive/rockchip64-6.12/dt/
