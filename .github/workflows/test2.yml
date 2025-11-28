@@ -124,10 +124,11 @@ jobs:
           "${GITHUB_WORKSPACE}/scripts/apply_patches.sh"
           "${GITHUB_WORKSPACE}/scripts/rename_to_conf.sh"
           sed -i 's|https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git|https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git|' lib/functions/configuration/main-config.sh
-          sed -i "s|tag:v6\.18-rc[1-7]|tag:v6\.18-rc${{ inputs.RC_VERSION }}|" config/sources/mainline-kernel.conf.sh
-          rm -f patch/kernel/archive/rockchip64-6.18/rk3576-0004-arch-arm64-dts-rockchip-remove-overclocked-CPU-OPP-t.patch
-          sed -i '28,38d' patch/kernel/archive/rockchip64-6.18/board-orangepi5-sata-supply.patch
-          cp -f ${GITHUB_WORKSPACE}/patch/test/meson64-6.18/* patch/kernel/archive/meson64-6.18/
+          sed -i "s|tag:v6\.18-rc[1-7]|tag:v6\.18|" config/sources/mainline-kernel.conf.sh
+          # sed -i "s|tag:v6\.18-rc[1-7]|tag:v6\.18-rc${{ inputs.RC_VERSION }}|" config/sources/mainline-kernel.conf.sh
+          # rm -f patch/kernel/archive/rockchip64-6.18/rk3576-0004-arch-arm64-dts-rockchip-remove-overclocked-CPU-OPP-t.patch
+          # sed -i '28,38d' patch/kernel/archive/rockchip64-6.18/board-orangepi5-sata-supply.patch
+          # cp -f ${GITHUB_WORKSPACE}/patch/test/meson64-6.18/* patch/kernel/archive/meson64-6.18/
 
       - name: Compile Kernel [ ${{ inputs.LinuxFamily }} ${{ inputs.BRANCH }} ]
         working-directory: /mnt/workdir/build
