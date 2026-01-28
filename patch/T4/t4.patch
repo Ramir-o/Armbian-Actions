@@ -42,3 +42,17 @@
  			hysteresis = <2000>;
  			type = "active";
  		};
+
+--- a/arch/arm64/boot/dts/rockchip/rk3399-op1.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-op1.dtsi
+@@ -34,8 +34,8 @@
+ 			opp-microvolt = <1100000>;
+ 		};
+ 		opp06 {
+-			opp-hz = /bits/ 64 <1512000000>;
+-			opp-microvolt = <1150000>;
++			opp-hz = /bits/ 64 <1608000000>;
++			opp-microvolt = <1200000>;
+ 		};
+ 	};
+
