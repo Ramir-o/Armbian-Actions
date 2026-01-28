@@ -71,8 +71,7 @@ if [[ "${BRANCH}" =~ ^(legacy)$ ]]; then
 		declare -g KERNEL_MAJOR_MINOR="6.12"\
 		;;
 		}' config/sources/families/include/meson64_common.inc
-  cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-1.patch patch/kernel/archive/meson64-6.12/
-  cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-2.patch patch/kernel/archive/meson64-6.12/
+  cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-*.patch patch/kernel/archive/meson64-6.12/
 
   sed -i '0,/case \$BRANCH in/{
 	/case \$BRANCH in/a\
@@ -83,6 +82,7 @@ if [[ "${BRANCH}" =~ ^(legacy)$ ]]; then
 		;;
 		}' config/sources/families/include/rockchip64_common.inc
   cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.12/
+  cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.12/
   cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information.patch patch/kernel/archive/rockchip64-6.12/
   cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rockchip64-6.12/dt/
   cp -f ${GITHUB_WORKSPACE}/patch/X2/rk3566-panther-x2.dts patch/kernel/archive/rockchip64-6.12/dt/
@@ -93,6 +93,8 @@ fi
 
 # T4 Patches
 echo "Copying T4 patches..."
+cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.18/
+cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.19/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.19/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.18/
@@ -106,10 +108,8 @@ cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan.patch patch/kernel/rk35xx-vendor-6.1/
 
 # N1 Patches
 echo "Copying N1 patches..."
-cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-1.patch patch/kernel/archive/meson64-6.18/
-cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-2.patch patch/kernel/archive/meson64-6.18/
-cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-1.patch patch/kernel/archive/meson64-6.19/
-cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-2.patch patch/kernel/archive/meson64-6.19/
+cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-*.patch patch/kernel/archive/meson64-6.18/
+cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1-*.patch patch/kernel/archive/meson64-6.19/
 cp -f ${GITHUB_WORKSPACE}/patch/N1/u-boot.ext config/optional/boards/aml-s9xx-box/_packages/bsp-cli/boot/
 
 # X2 Patches
