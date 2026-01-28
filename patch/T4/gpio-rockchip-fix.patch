@@ -1,0 +1,11 @@
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -593,7 +593,7 @@
+ 	gc->ngpio = bank->nr_pins;
+ 	gc->label = bank->name;
+ 	gc->parent = bank->dev;
+-	gc->can_sleep = true;
++	gc->can_sleep = false;
+ 
+ 	ret = gpiochip_add_data(gc, bank);
+ 	if (ret) {
