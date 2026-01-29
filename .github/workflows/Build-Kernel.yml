@@ -25,15 +25,6 @@ on:
           - 'flippy'
           - 'legacy'
 
-      KERNEL_COMPILER:
-        description: 'Kernel Compiler'
-        default: 'gcc'
-        required: true
-        type: choice
-        options:
-          - 'gcc'
-          - 'clang'
-
 env:
   TZ: Asia/Shanghai
   BRANCH: ${{ inputs.BRANCH }}
@@ -134,7 +125,7 @@ jobs:
             meson)      BoardFamily="onecloud" ;;
           esac
           [ "${{ inputs.BRANCH }}" = "flippy" ] && EXTRA_ARGS="EXTRAWIFI=no DISABLE_KERNEL_PATCHES=yes" || EXTRA_ARGS=""
-          ./compile.sh kernel BOARD=${BoardFamily} BRANCH=${{ inputs.BRANCH }} KERNEL_COMPILER=${{ inputs.KERNEL_COMPILER }} PREFER_DOCKER=no DOCKER_ARMBIAN_BASE_IMAGE=ubuntu:noble DEB_COMPRESS=xz SHARE_LOG=yes ${EXTRA_ARGS}
+          ./compile.sh kernel BOARD=${BoardFamily} BRANCH=${{ inputs.BRANCH }} PREFER_DOCKER=no DOCKER_ARMBIAN_BASE_IMAGE=ubuntu:noble DEB_COMPRESS=xz SHARE_LOG=yes ${EXTRA_ARGS}
 
       - name: Prepare Kernel Metadata
         working-directory: /mnt/workdir/build/output/debs
