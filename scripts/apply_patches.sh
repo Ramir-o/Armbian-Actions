@@ -87,6 +87,7 @@ if [[ "${BRANCH}" =~ ^(legacy)$ ]]; then
   cp -f ${GITHUB_WORKSPACE}/patch/X2/rk3566-panther-x2.dts patch/kernel/archive/rockchip64-6.12/dt/
   cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rockchip64-6.12/dt/
   cp -f ${GITHUB_WORKSPACE}/patch/test/legacy/rockchip64/* patch/kernel/archive/rockchip64-6.12/
+  cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.12/
   rm -f patch/kernel/archive/rockchip64-6.12/board-pbp-add-dp-alt-mode.patch
   cp -f ${GITHUB_WORKSPACE}/patch/test/legacy/config/* config/kernel/
 fi
@@ -95,6 +96,8 @@ fi
 echo "Copying T4 patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.19/
+cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.18/
+cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.19/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.19/
 
