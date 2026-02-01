@@ -225,7 +225,7 @@ jobs:
             mv "${file}" "${newname}"
           done
           tar -czf "../${{ env.VERSION }}_${{ inputs.BOARD }}_${{ inputs.RELEASE }}_${{ inputs.BRANCH }}.tar.gz" \
-              --exclude=linux-dtb* --exclude=linux-headers* --exclude=linux-image* --exclude=linux-libc* * || { echo "Failed to create tar.gz file"; exit 1; }
+              --exclude=linux-dtb* --exclude=linux-headers* --exclude=linux-image* --exclude=linux-libc* --exclude=*${{ inputs.BOARD }}-${{ env.VERSION }}* * || { echo "Failed to create tar.gz file"; exit 1; }
           echo "Compressed matching files to ${{ env.VERSION }}_${{ inputs.BOARD }}_${{ inputs.RELEASE }}_${{ inputs.BRANCH }}.tar.gz"
           tar -tzf "../${{ env.VERSION }}_${{ inputs.BOARD }}_${{ inputs.RELEASE }}_${{ inputs.BRANCH }}.tar.gz" > /dev/null || { echo "Failed to verify tar.gz file"; exit 1; }
 

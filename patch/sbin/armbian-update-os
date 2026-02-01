@@ -88,14 +88,13 @@ get_latest_version() {
     if [[ -n "${filtered_versions}" ]]; then
         echo "${filtered_versions}" | sort -V | tail -n 1
     else
-        echo -e "${INFO} 未找到相符升级文件！"
-        exit 0
+        error "未找到相符升级文件！"
     fi
 }
 
 check_and_set_os_version() {
     LATEST_VERSION=$(get_latest_version) || error "无法获取最新的系统版本！"
-    [[ -z "${LATEST_VERSION}" || ! "${LATEST_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] && error "获取到的最新版本号格式错误：${LATEST_VERSION}！"
+    [[ -z "${LATEST_VERSION}" || ! "${LATEST_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] && error "获取到的最新版本号格式错误！"
     echo -e "${INFO} 最新系统版本：[\033[92m ${LATEST_VERSION} \033[0m]"
     if [[ "${ARMBIAN_VERSION}" == "${LATEST_VERSION}" ]]; then
       echo -e "${INFO} 您的系统已是最新版本！"
