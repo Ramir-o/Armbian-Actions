@@ -96,8 +96,6 @@ fi
 echo "Copying T4 patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.19/
-cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.18/
-cp -f ${GITHUB_WORKSPACE}/patch/T4/gpio-rockchip-fix.patch patch/kernel/archive/rockchip64-6.19/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.19/
 
