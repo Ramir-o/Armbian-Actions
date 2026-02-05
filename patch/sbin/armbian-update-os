@@ -39,6 +39,11 @@ OS_BRANCH=$(dpkg-query -W -f='${Package}\n' | awk -v b="${BOARD}" '$1 ~ ("armbia
 [[ -z "${OS_BRANCH}" ]] && error "信息为空，请检查！"
 
 # 函数
+validate_version_format() {
+    [[ "${1}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || error "版本号格式不正确：[\033[91m ${1} \033[0m]，请使用 x.y.z 的格式，例如：26.02.1"
+    return 0
+}
+
 check_and_install_file() {
     OS_FILES=($(find . -maxdepth 1 -regextype posix-extended -regex "\./[0-9]+\.[0-9]+\.[0-9]+_${BOARD}_${VERSION_CODENAME}_${OS_BRANCH}\.tar\.gz" -exec basename {} \; | sort -Vr))
     if [[ ${#OS_FILES[@]} -gt 0 ]]; then
@@ -93,6 +98,7 @@ get_latest_version() {
 }
 
 check_and_set_os_version() {
+  if [[ -z "${OS_VERSION}" ]]; then
     LATEST_VERSION=$(get_latest_version) || error "无法获取最新的系统版本！"
     [[ -z "${LATEST_VERSION}" || ! "${LATEST_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] && error "获取到的最新版本号格式错误！"
     echo -e "${INFO} 最新系统版本：[\033[92m ${LATEST_VERSION} \033[0m]"
@@ -108,6 +114,9 @@ check_and_set_os_version() {
       OS_VERSION="${LATEST_VERSION}"
       echo -e "${INFO} 您选择更新到最新版本：[\033[92m ${OS_VERSION} \033[0m]"
     fi
+  else
+    echo -e "${INFO} 指定系统版本：[\033[92m ${OS_VERSION} \033[0m]"
+  fi
 }
 
 handle_proxy() {
@@ -202,10 +211,16 @@ reboot_system() {
 }
 
 OPTERR=0
-while getopts ":u:" opt; do
+while getopts ":k:u:" opt; do
     case ${opt} in
+        k)
+            [[ -z "${OPTARG}" ]] && error "请在 -k 后指定版本号，格式：-k x.y.z"
+            validate_version_format "${OPTARG}" || exit 1
+            OS_VERSION="${OPTARG}"
+            SKIP_FILE_CHECK=true
+            ;;
         u)
-            [[ -z "${OPTARG}" ]] && error "请在 -u 后指定仓库，例如：-u owner/repo"
+            [[ -z "${OPTARG}" ]] && error "请在 -u 后指定仓库，格式：-u owner/repo"
             if [[ ! "${OPTARG}" =~ ^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+$ ]]; then
                 error "仓库格式错误！正确格式为：用户名/仓库名，例如：Zane-E/Armbian-Actions"
             fi
@@ -213,7 +228,7 @@ while getopts ":u:" opt; do
             SKIP_FILE_CHECK=true
             ;;
         :)
-            error "选项 \033[91m-${OPTARG}\033[0m 缺少参数，例如：-u owner/repo"
+            error "选项 \033[91m-${OPTARG}\033[0m 缺少参数"
             ;;
         *)
             error "未知参数：\033[91m-${OPTARG}\033[0m"
