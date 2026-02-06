@@ -43,9 +43,9 @@ if [[ "${BRANCH}" =~ ^(flippy)$ ]]; then
   sed -i '0,/case \$BRANCH in/{
 	/case \$BRANCH in/a\
 	flippy)\
-		declare -g KERNEL_MAJOR_MINOR="6.12"    # Major and minor versions of this kernel.\
+		declare -g KERNEL_MAJOR_MINOR="6.18"    # Major and minor versions of this kernel.\
 		declare -g -i KERNEL_GIT_CACHE_TTL=120 # 2 minutes; this is a high-traffic repo\
-		KERNELSOURCE='"'"'https://github.com/unifreq/linux-6.12.y.git'"'"'\
+		KERNELSOURCE='"'"'https://github.com/unifreq/linux-6.18.y.git'"'"'\
 		KERNELBRANCH='"'"'branch:main'"'"'\
 		;;
 		}' config/sources/families/include/meson64_common.inc
@@ -53,9 +53,9 @@ if [[ "${BRANCH}" =~ ^(flippy)$ ]]; then
   sed -i '0,/case \$BRANCH in/{
 	/case \$BRANCH in/a\
 	flippy)\
-		declare -g KERNEL_MAJOR_MINOR="6.12"    # Major and minor versions of this kernel.\
+		declare -g KERNEL_MAJOR_MINOR="6.18"    # Major and minor versions of this kernel.\
 		declare -g -i KERNEL_GIT_CACHE_TTL=120 # 2 minutes; this is a high-traffic repo\
-		KERNELSOURCE='"'"'https://github.com/unifreq/linux-6.12.y.git'"'"'\
+		KERNELSOURCE='"'"'https://github.com/unifreq/linux-6.18.y.git'"'"'\
 		KERNELBRANCH='"'"'branch:main'"'"'\
 		;;
 		}' config/sources/families/include/rockchip64_common.inc
