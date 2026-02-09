@@ -1,5 +1,5 @@
 --- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
---- b/arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
 @@ -29,8 +29,15 @@
  	fan0: pwm-fan {
  		compatible = "pwm-fan";
