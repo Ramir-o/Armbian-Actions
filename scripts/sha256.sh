@@ -8,7 +8,7 @@ extract_all_versions_with_sha() {
     awk '
         BEGIN { RS="<li"; ORS="\n" }
         {
-            match($0, /kernel-[^"]+\.tar\.gz/, file)
+            match($0, /kernel-[0-9]+\.[0-9]+\.[0-9]+-[^"]+\.tar\.gz/, file)
             match($0, /sha256:([a-f0-9]{64})/, sha)
             if (length(file[0]) && length(sha[1])) {
                 print file[0] " " sha[1]

@@ -102,7 +102,11 @@ cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.19
 echo "Copying 5C patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/5C/reopen_disabled_nodes.patch patch/u-boot/legacy/u-boot-radxa-rk35xx/board_rock-5c/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information.patch patch/kernel/rk35xx-vendor-6.1/
-cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan.patch patch/kernel/rk35xx-vendor-6.1/
+cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan-5c.patch patch/kernel/rk35xx-vendor-6.1/
+
+# 5T Patches
+echo "Copying 5T patches..."
+cp -f ${GITHUB_WORKSPACE}/patch/5T/diyfan-5t.patch patch/kernel/rk35xx-vendor-6.1/
 
 # N1 Patches
 echo "Copying N1 patches..."
