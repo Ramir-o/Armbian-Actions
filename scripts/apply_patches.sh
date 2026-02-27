@@ -97,6 +97,8 @@ cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/a
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.19/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-6.19/
+rm -f patch/kernel/archive/rockchip64-6.18/rk3308-i2s-default-rate.patch
+rm -f patch/kernel/archive/rockchip64-6.19/rk3308-i2s-default-rate.patch
 
 # 5C Patches
 echo "Copying 5C patches..."
