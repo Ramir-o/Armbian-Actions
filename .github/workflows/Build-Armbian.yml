@@ -11,6 +11,7 @@ on:
         options:
           - 'nanopct4'
           - 'rock-5c'
+          - 'rock-5t'
           - 'panther-x2'
           - 'aml-s9xx-box'
           - 'radxa-cubie-a5e'
