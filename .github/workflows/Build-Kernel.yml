@@ -106,9 +106,9 @@ jobs:
         run: |
           df -hT ${PWD}
           git clone -q --branch=main https://github.com/armbian/build.git build
+          ln -sf /mnt/workdir/build ${GITHUB_WORKSPACE}/build
           cd ${GITHUB_WORKSPACE}/build
           git reset --hard ca016e89b7e7dcdde18e3d30df48e1fef2c9efec
-          ln -sf /mnt/workdir/build ${GITHUB_WORKSPACE}/build
 
       - name: Apply patches
         working-directory: /mnt/workdir/build
