@@ -130,6 +130,10 @@ cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rock
 cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rockchip64-6.19/dt/
 cp -f ${GITHUB_WORKSPACE}/patch/JP/dt/rk3566-jp-tvbox.dts patch/kernel/rk35xx-vendor-6.1/dt/
 
+# Enable Meson for the new kernel
+sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
+rm patch/kernel/archive/meson-6.12/0052-drm-meson-Describe-the-HDMI-PHY-frequency-limits-of-.patch
+
 # Remove '-unofficial' from the VENDOR name
 sed -i 's|Armbian-unofficial|Armbian|g' lib/functions/configuration/main-config.sh
 
@@ -160,7 +164,6 @@ sed -i '252{/else/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '253{/display_alert/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '272{/display_alert/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '398{/display_alert/s/^/#/}' lib/functions/main/config-prepare.sh
-sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
 
 # Set custom version automatically based on date
 # Format: YY.MM.1 (e.g., 25.11.1)
