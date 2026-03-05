@@ -160,6 +160,7 @@ sed -i '252{/else/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '253{/display_alert/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '272{/display_alert/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '398{/display_alert/s/^/#/}' lib/functions/main/config-prepare.sh
+sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
 
 # Set custom version automatically based on date
 # Format: YY.MM.1 (e.g., 25.11.1)
