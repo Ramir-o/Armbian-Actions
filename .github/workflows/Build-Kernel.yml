@@ -108,7 +108,11 @@ jobs:
           git clone -q --branch=main https://github.com/armbian/build.git build
           ln -sf /mnt/workdir/build ${GITHUB_WORKSPACE}/build
           cd ${GITHUB_WORKSPACE}/build
-          git reset --hard ca016e89b7e7dcdde18e3d30df48e1fef2c9efec
+          if "${{ inputs.LinuxFamily }}" = "rockchip64"
+            git reset --hard 3fc2afdd39d8b4f505bb7ff6afa7fe29b9680a0d
+          else
+            git reset --hard ca016e89b7e7dcdde18e3d30df48e1fef2c9efec
+          fi
 
       - name: Apply patches
         working-directory: /mnt/workdir/build
