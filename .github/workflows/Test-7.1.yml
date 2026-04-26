@@ -119,6 +119,7 @@ jobs:
           cp -rf patch/kernel/archive/meson64-7.0 patch/kernel/archive/meson64-7.1
           sed -i "s|7\.0|7\.1|g" config/sources/families/include/meson64_common.inc
           rm -f patch/kernel/archive/meson64-7.1/general-si2168-fix-cmd-timeout.patch
+          rm -f patch/kernel/archive/meson64-7.1/fix-n1-1.patch
 
       - name: Compile Kernel [ ${{ inputs.LinuxFamily }} ${{ inputs.BRANCH }} ] [ rc${{ inputs.RC_VERSION }} ]
         working-directory: /mnt/workdir/build
