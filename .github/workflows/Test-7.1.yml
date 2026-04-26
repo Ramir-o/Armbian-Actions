@@ -116,6 +116,9 @@ jobs:
           "${GITHUB_WORKSPACE}/scripts/rename_to_conf.sh"
           sed -i 's|https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git|https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git|g' lib/functions/configuration/main-config.sh
           sed -i "s|7\.1-rc[1-8]|7\.1-rc${{ inputs.RC_VERSION }}|g" config/sources/mainline-kernel.conf.sh
+          cp -rf patch/kernel/archive/meson64-7.0 patch/kernel/archive/meson64-7.1
+          sed -i "s|7\.0|7\.1|g" config/sources/families/include/meson64_common.inc
+          rm -f patch/kernel/archive/meson64-7.1/general-si2168-fix-cmd-timeout.patch
 
       - name: Compile Kernel [ ${{ inputs.LinuxFamily }} ${{ inputs.BRANCH }} ] [ rc${{ inputs.RC_VERSION }} ]
         working-directory: /mnt/workdir/build
