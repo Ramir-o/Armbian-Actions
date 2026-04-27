@@ -125,7 +125,7 @@ jobs:
           # rockchip64
           sed -i "s|7\.0|7\.1|g" config/sources/families/include/rockchip64_common.inc
           cp -rf patch/kernel/archive/rockchip64-7.0 patch/kernel/archive/rockchip64-7.1
-          cp -f ${GITHUB_WORKSPACE}/patch/test/rockchip64-7.1/ patch/kernel/archive/rockchip64-7.1/
+          cp -f ${GITHUB_WORKSPACE}/patch/test/rockchip64-7.1/* patch/kernel/archive/rockchip64-7.1/
 
       - name: Compile Kernel [ ${{ inputs.LinuxFamily }} ${{ inputs.BRANCH }} ] [ rc${{ inputs.RC_VERSION }} ]
         working-directory: /mnt/workdir/build
