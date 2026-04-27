@@ -121,6 +121,7 @@ jobs:
           sed -i "s|7\.0|7\.1|g" config/sources/families/include/meson64_common.inc
           rm -f patch/kernel/archive/meson64-7.1/general-si2168-fix-cmd-timeout.patch
           rm -f patch/kernel/archive/meson64-7.1/fix-n1-1.patch
+          rm -f patch/kernel/archive/meson64-7.0/driver-power-meson64-reset.patch
           # rockchip64
           sed -i "s|7\.0|7\.1|g" config/sources/families/include/rockchip64_common.inc
           cp -rf patch/kernel/archive/rockchip64-7.0 patch/kernel/archive/rockchip64-7.1
