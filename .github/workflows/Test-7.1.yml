@@ -50,6 +50,10 @@ on:
           - '2'
           - '3'
           - '4'
+      PR:
+        description: 'Enter the PR number to build'
+        required: true
+        type: string
 
 env:
   TZ: Asia/Shanghai
@@ -108,6 +112,11 @@ jobs:
           df -hT ${PWD}
           git clone -q --single-branch --depth=1 --branch=main https://github.com/armbian/build build
           ln -sf /mnt/workdir/build ${GITHUB_WORKSPACE}/build
+          cd ${GITHUB_WORKSPACE}/build
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git fetch origin pull/${{ inputs.PR }}/head:pr-branch
+          git merge pr-branch --no-ff --strategy=recursive -X theirs -m "Merge PR #${{ inputs.PR }} into main"
 
       - name: Apply patches
         working-directory: /mnt/workdir/build
@@ -123,9 +132,14 @@ jobs:
           rm -f patch/kernel/archive/meson64-7.1/fix-n1-1.patch
           rm -f patch/kernel/archive/meson64-7.1/driver-power-meson64-reset.patch
           # rockchip64
-          sed -i "s|7\.0|7\.1|g" config/sources/families/include/rockchip64_common.inc
-          cp -rf patch/kernel/archive/rockchip64-7.0 patch/kernel/archive/rockchip64-7.1
-          cp -f ${GITHUB_WORKSPACE}/patch/test/rockchip64-7.1/* patch/kernel/archive/rockchip64-7.1/
+          # sed -i "s|7\.0|7\.1|g" config/sources/families/include/rockchip64_common.inc
+          # cp -rf patch/kernel/archive/rockchip64-7.0 patch/kernel/archive/rockchip64-7.1
+          # cp -f ${GITHUB_WORKSPACE}/patch/test/rockchip64-7.1/* patch/kernel/archive/rockchip64-7.1/
+          cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-7.1/ || true
+          cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-7.1/ || true
+          cp -f ${GITHUB_WORKSPACE}/patch/X2/rk3566-panther-x2.dts patch/kernel/archive/rockchip64-7.1/dt/ || true
+          cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rockchip64-7.1/dt/ || true
+
 
       - name: Compile Kernel [ ${{ inputs.LinuxFamily }} ${{ inputs.BRANCH }} ] [ rc${{ inputs.RC_VERSION }} ]
         working-directory: /mnt/workdir/build
