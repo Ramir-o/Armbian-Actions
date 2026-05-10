@@ -9,18 +9,39 @@
 #  教程链接：https://zhou.pp.ua
 # ==============================================================================
 
-set -e
+set -o pipefail
 
-STEPS="[\033[95m 步骤 \033[0m]"
-INFO="[\033[94m 信息 \033[0m]"
-SUCCESS="[\033[92m 成功 \033[0m]"
-OPTIONS="[\033[93m 选项 \033[0m]"
-ERROR="[\033[91m 错误 \033[0m]"
-SN="[\033[96m 序号 \033[0m]"
+readonly STEPS="[\033[95m 步骤 \033[0m]"
+readonly INFO="[\033[94m 信息 \033[0m]"
+readonly SUCCESS="[\033[92m 成功 \033[0m]"
+readonly OPTIONS="[\033[93m 选项 \033[0m]"
+readonly ERROR="[\033[91m 错误 \033[0m]"
+readonly SN="[\033[96m 序号 \033[0m]"
+
+ADDR_INFO=""
+ARCH=""
+CIDR=""
+GATEWAY=""
+IP_ADDR=""
+MAC_ADDR=""
+NET_IF=""
+NET_IF_LIST=""
+NETMASK=""
+NETMASK_DECIMAL=""
+SCRIPT_DIR=""
+VERSION_CODENAME=""
+
+log_error() {
+    echo -e "${ERROR} ${1}"
+}
+
+die() {
+    log_error "${1}"
+    exit 1
+}
 
 error() {
-    echo -e "${ERROR} ${1}"
-    exit 1
+    die "${1}"
 }
 
 require_command() {
@@ -61,6 +82,28 @@ prompt_yes_no() {
     read -r -p "$(echo -e "${prompt}")" choice
     choice="${choice:-${default}}"
     [[ "${choice}" =~ ^[Yy]$ ]]
+}
+
+download_file() {
+    local output_file="${1}"
+    local url="${2}"
+
+    curl -fsSL --retry 3 --retry-delay 1 --connect-timeout 5 --max-time 60 \
+        -o "${output_file}" "${url}" >/dev/null 2>&1
+}
+
+fetch_text() {
+    local url="${1}"
+    local max_time="${2:-5}"
+
+    curl -fsSL --retry 2 --retry-delay 1 --connect-timeout 3 --max-time "${max_time}" "${url}"
+}
+
+url_available() {
+    local url="${1}"
+    local max_time="${2:-3}"
+
+    curl -fIsL --retry 2 --retry-delay 1 --connect-timeout 3 --max-time "${max_time}" "${url}" >/dev/null 2>&1
 }
 
 check_env() {
@@ -276,7 +319,7 @@ setup_repositories() {
 
     export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-    country=$(curl -fsS --max-time 3 https://ipinfo.io/country 2>/dev/null || echo "UNKNOWN")
+    country=$(fetch_text https://ipinfo.io/country 3 2>/dev/null || echo "UNKNOWN")
     country=${country:-UNKNOWN}
 
     declare -A mirrors
@@ -294,14 +337,14 @@ setup_repositories() {
 
     echo -e "${INFO} 检测到地区：\033[95m${country}\033[0m → 首选源：\033[95m${region} (${primary})\033[0m"
 
-    if curl -fsIL --retry 2 --retry-delay 1 --max-time 5 "${primary}/pxcloud/" >/dev/null 2>&1; then
+    if url_available "${primary}/pxcloud/" 5; then
         mirror="${primary}"
         echo -e "${INFO} 首选源可用 → 使用：\033[95m${region} (${mirror})\033[0m"
     else
         echo -e "${INFO} 首选源不可用：\033[95m${primary}\033[0m"
         if [[ "${primary}" != "${mirrors[DEFAULT]}" ]]; then
             echo -e "${INFO} 尝试 \033[95mCloudflare\033[0m 源..."
-            if curl -fsI -m 3 "${mirrors[DEFAULT]}/pxcloud/" >/dev/null 2>&1; then
+            if url_available "${mirrors[DEFAULT]}/pxcloud/" 3; then
                 mirror="${mirrors[DEFAULT]}"
                 region="Cloudflare"
                 echo -e "${INFO} \033[95mCloudflare\033[0m 源可用 → 使用：\033[95m${region} (${mirror})\033[0m"
@@ -314,7 +357,7 @@ setup_repositories() {
             echo -e "${INFO} 尝试备用源..."
             for src in "${mirrors[CN]}" "${mirrors[JP]}" "${mirrors[DE]}"; do
                 [[ "${src}" == "${primary}" ]] && continue
-                if curl -fsI -m 3 "${src}/pxcloud/" >/dev/null 2>&1; then
+                if url_available "${src}/pxcloud/" 3; then
                     mirror="${src}"
                     case "${src}" in
                         "${mirrors[CN]}") region="China" ;;
@@ -331,7 +374,7 @@ setup_repositories() {
 
     [[ -n "${mirror}" ]] || error "所有软件源均不可用，请检查网络！"
 
-    if curl -fsSL "${mirror}/pxcloud/lierfang.gpg" -o /etc/apt/trusted.gpg.d/lierfang.gpg >/dev/null 2>&1; then
+    if download_file /etc/apt/trusted.gpg.d/lierfang.gpg "${mirror}/pxcloud/lierfang.gpg"; then
         echo -e "${STEPS} 已下载：\033[95m/etc/apt/trusted.gpg.d/lierfang.gpg\033[0m"
     else
         error "下载 lierfang.gpg 失败！"

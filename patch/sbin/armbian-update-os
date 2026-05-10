@@ -5,21 +5,42 @@
 #  脚本功能：从 GitHub Release 下载或安装本地 Armbian 系统升级包
 # ==============================================================================
 
-ARMBIAN_RELEASE_FILE="/etc/armbian-release"
-OS_RELEASE_FILE="/etc/os-release"
-GITHUB_REPO="Zane-E/Armbian-Actions"
-PROXIES=("gh-proxy.com" "ghproxy.net" "ghfast.top")
+set -o pipefail
 
-STEPS="[\033[95m 步骤 \033[0m]"
-INFO="[\033[94m 信息 \033[0m]"
-SUCCESS="[\033[92m 成功 \033[0m]"
-OPTIONS="[\033[93m 选项 \033[0m]"
-ERROR="[\033[91m 错误 \033[0m]"
-SN="[\033[96m 序号 \033[0m]"
+readonly ARMBIAN_RELEASE_FILE="/etc/armbian-release"
+readonly OS_RELEASE_FILE="/etc/os-release"
+GITHUB_REPO="Zane-E/Armbian-Actions"
+readonly -a PROXIES=("gh-proxy.com" "ghproxy.net" "ghfast.top")
+
+readonly STEPS="[\033[95m 步骤 \033[0m]"
+readonly INFO="[\033[94m 信息 \033[0m]"
+readonly SUCCESS="[\033[92m 成功 \033[0m]"
+readonly OPTIONS="[\033[93m 选项 \033[0m]"
+readonly ERROR="[\033[91m 错误 \033[0m]"
+readonly SN="[\033[96m 序号 \033[0m]"
+
+ARMBIAN_VERSION=""
+BOARD=""
+ORIGINAL_DIR=""
+OS_BRANCH=""
+OS_FILE=""
+OS_VERSION=""
+PROXY_URL=""
+SKIP_FILE_CHECK=false
+TEMP_DIR=""
+VERSION_CODENAME=""
+
+log_error() {
+    echo -e "${ERROR} ${1}"
+}
+
+die() {
+    log_error "${1}"
+    exit 1
+}
 
 error() {
-    echo -e "${ERROR} ${1}"
-    exit 1
+    die "${1}"
 }
 
 require_command() {
@@ -50,7 +71,6 @@ check_dependencies() {
         sort
         tail
         tar
-        wget
     )
 
     for cmd in "${required_commands[@]}"; do
@@ -115,6 +135,27 @@ cleanup_temp_dir() {
     echo -e "${SUCCESS} 临时目录已删除！"
 }
 
+download_file() {
+    local output_file="${1}"
+    local url="${2}"
+
+    curl -fsSL --retry 3 --retry-delay 1 --connect-timeout 5 --max-time 300 \
+        -o "${output_file}" "${url}" >/dev/null 2>&1
+}
+
+fetch_text() {
+    local url="${1}"
+
+    curl -fsSL --retry 3 --retry-delay 1 --connect-timeout 5 --max-time 30 "${url}"
+}
+
+url_available() {
+    local url="${1}"
+    local max_time="${2:-3}"
+
+    curl -fIsL --retry 2 --retry-delay 1 --connect-timeout 3 --max-time "${max_time}" "${url}" >/dev/null 2>&1
+}
+
 check_and_install_file() {
     local choice
     local exit_num
@@ -174,8 +215,7 @@ get_latest_version() {
     local filtered_versions
     local versions
 
-    versions=$(curl -fsSL --retry 3 --retry-delay 1 --max-time 5 \
-        "https://github.com/${GITHUB_REPO}/releases/expanded_assets/Armbian-Debs" 2>/dev/null) ||
+    versions=$(fetch_text "https://github.com/${GITHUB_REPO}/releases/expanded_assets/Armbian-Debs" 2>/dev/null) ||
         error "无法访问 GITHUB，检查网络连接！"
 
     filtered_versions=$(echo "${versions}" |
@@ -230,7 +270,7 @@ handle_proxy() {
     for index in "${shuffled_indices[@]}"; do
         proxy_url="https://${PROXIES[$index]}/"
         echo -e "${INFO} 尝试代理加速：[\033[92m ${PROXIES[$index]} \033[0m]"
-        if curl -fIsL --retry 2 --retry-delay 1 --max-time 3 "${proxy_url}" >/dev/null 2>&1; then
+        if url_available "${proxy_url}" 3; then
             PROXY_URL="${proxy_url}"
             echo -e "${SUCCESS} 代理加速可用！"
             return 0
@@ -252,9 +292,9 @@ download_os_package() {
     archive_name="${OS_VERSION}_${BOARD}_${VERSION_CODENAME}_${OS_BRANCH}.tar.gz"
     download_url="${PROXY_URL}https://github.com/${GITHUB_REPO}/releases/download/Armbian-Debs/${archive_name}"
 
-    cd "${TEMP_DIR}" || exit 1
+    cd "${TEMP_DIR}" || error "无法进入临时目录：${TEMP_DIR}"
     echo -e "${STEPS} 正在下载文件：[\033[92m ${archive_name} \033[0m]"
-    wget --tries=3 --retry-connrefused --waitretry=1 -q -O "${archive_name}" "${download_url}" >/dev/null 2>&1 ||
+    download_file "${archive_name}" "${download_url}" ||
         error "下载失败，请检查版本号或网络连接！"
 
     echo -e "${SUCCESS} 文件下载完成！"

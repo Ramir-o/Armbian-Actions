@@ -5,45 +5,46 @@
 #  脚本功能：切换系统软件源，并按需注释 Armbian / armbian-config 源
 # ==============================================================================
 
-SOURCE_FILE="/etc/apt/sources.list"
-SOURCE_BACKUP_FILE="/etc/apt/sources.list.bak"
-DEBIAN_SOURCE_FILE="/etc/apt/sources.list.d/debian.sources"
-DEBIAN_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/debian.sources.bak"
-UBUNTU_SOURCE_FILE="/etc/apt/sources.list.d/ubuntu.sources"
-UBUNTU_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/ubuntu.sources.bak"
-ARMBIAN_SOURCE_FILE="/etc/apt/sources.list.d/armbian.sources"
-ARMBIAN_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/armbian.sources.bak"
-ARMBIAN_CONFIG_SOURCE_FILE="/etc/apt/sources.list.d/armbian-config.sources"
-ARMBIAN_CONFIG_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/armbian-config.sources.bak"
-OS_RELEASE_FILE="/etc/os-release"
+set -o pipefail
 
-STEPS="[\033[95m 步骤 \033[0m]"
-INFO="[\033[94m 信息 \033[0m]"
-SUCCESS="[\033[92m 成功 \033[0m]"
-OPTIONS="[\033[93m 选项 \033[0m]"
-ERROR="[\033[91m 错误 \033[0m]"
-SN="[\033[96m 序号 \033[0m]"
+readonly SOURCE_FILE="/etc/apt/sources.list"
+readonly SOURCE_BACKUP_FILE="/etc/apt/sources.list.bak"
+readonly DEBIAN_SOURCE_FILE="/etc/apt/sources.list.d/debian.sources"
+readonly DEBIAN_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/debian.sources.bak"
+readonly UBUNTU_SOURCE_FILE="/etc/apt/sources.list.d/ubuntu.sources"
+readonly UBUNTU_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/ubuntu.sources.bak"
+readonly ARMBIAN_SOURCE_FILE="/etc/apt/sources.list.d/armbian.sources"
+readonly ARMBIAN_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/armbian.sources.bak"
+readonly ARMBIAN_CONFIG_SOURCE_FILE="/etc/apt/sources.list.d/armbian-config.sources"
+readonly ARMBIAN_CONFIG_SOURCE_BACKUP_FILE="/etc/apt/sources.list.d/armbian-config.sources.bak"
+readonly OS_RELEASE_FILE="/etc/os-release"
 
-error() {
+readonly STEPS="[\033[95m 步骤 \033[0m]"
+readonly INFO="[\033[94m 信息 \033[0m]"
+readonly SUCCESS="[\033[92m 成功 \033[0m]"
+readonly OPTIONS="[\033[93m 选项 \033[0m]"
+readonly ERROR="[\033[91m 错误 \033[0m]"
+readonly SN="[\033[96m 序号 \033[0m]"
+
+VERSION_CODEID=""
+VERSION_CODENAME=""
+MIRROR_URL=""
+
+log_error() {
     echo -e "${ERROR} ${1}"
+}
+
+die() {
+    log_error "${1}"
     exit 1
 }
 
 require_command() {
-    command -v "${1}" >/dev/null 2>&1 || error "缺少依赖命令：[\033[92m ${1} \033[0m]"
+    command -v "${1}" >/dev/null 2>&1 || die "缺少依赖命令：[\033[92m ${1} \033[0m]"
 }
 
-check_dependencies() {
-    local cmd
-    local required_commands=(cp grep id rm sed)
-
-    for cmd in "${required_commands[@]}"; do
-        require_command "${cmd}"
-    done
-}
-
-check_root() {
-    [[ "$(id -u)" -eq 0 ]] || error "请使用 root 用户运行！"
+require_root() {
+    [[ "$(id -u)" -eq 0 ]] || die "请使用 root 用户运行！"
 }
 
 prompt_yes_no() {
@@ -56,19 +57,28 @@ prompt_yes_no() {
     [[ "${choice}" =~ ^[Yy]$ ]]
 }
 
+check_dependencies() {
+    local cmd
+    local required_commands=(cp grep id rm sed)
+
+    for cmd in "${required_commands[@]}"; do
+        require_command "${cmd}"
+    done
+}
+
 load_release_info() {
-    [[ -f "${OS_RELEASE_FILE}" ]] || error "未检测到系统的 release 文件！"
+    [[ -f "${OS_RELEASE_FILE}" ]] || die "未检测到系统的 release 文件！"
     # shellcheck disable=SC1090
     source "${OS_RELEASE_FILE}"
 
     VERSION_CODEID="${ID}"
-    [[ -n "${VERSION_CODEID}" ]] || error "未检测到系统的 VERSION_CODEID！"
-    [[ -n "${VERSION_CODENAME}" ]] || error "未检测到系统的 VERSION_CODENAME！"
+    [[ -n "${VERSION_CODEID}" ]] || die "未检测到系统的 VERSION_CODEID！"
+    [[ -n "${VERSION_CODENAME}" ]] || die "未检测到系统的 VERSION_CODENAME！"
 }
 
 backup_if_needed() {
-    local backup_file="${2}"
     local source_file="${1}"
+    local backup_file="${2}"
 
     if [[ -f "${source_file}" && ! -f "${backup_file}" ]]; then
         cp -f "${source_file}" "${backup_file}"
@@ -83,12 +93,22 @@ backup_source_list() {
     backup_if_needed "${ARMBIAN_CONFIG_SOURCE_FILE}" "${ARMBIAN_CONFIG_SOURCE_BACKUP_FILE}"
 }
 
-comment_source_file() {
+comment_all_lines() {
     local file="${1}"
 
-    if [[ -f "${file}" ]]; then
-        sed -i 's/^/#/' "${file}"
-    fi
+    [[ -f "${file}" ]] && sed -i 's/^/#/' "${file}"
+}
+
+comment_active_lines() {
+    local file="${1}"
+
+    [[ -f "${file}" ]] && sed -i 's/^[^#]/#&/' "${file}"
+}
+
+has_active_lines() {
+    local file="${1}"
+
+    grep -q '^[^#]' "${file}"
 }
 
 write_source_list() {
@@ -160,28 +180,34 @@ deb http://${MIRROR_URL}/debian ${VERSION_CODENAME} main contrib non-free non-fr
 EOF
             ;;
         *)
-            error "未检测到系统版本：[ ${VERSION_CODENAME} ]"
+            die "未检测到系统版本：[ ${VERSION_CODENAME} ]"
             ;;
     esac
+}
+
+disable_deb822_source_if_needed() {
+    local file="${1}"
+
+    [[ -f "${file}" ]] || return 0
+
+    if ! has_active_lines "${file}"; then
+        echo -e "${SUCCESS} 成功更改系统软件源！"
+        return 1
+    fi
+
+    comment_all_lines "${file}"
+    return 0
 }
 
 change_source_list() {
     write_source_list
 
-    if [[ -f "${DEBIAN_SOURCE_FILE}" ]]; then
-        if ! grep -q '^[^#]' "${DEBIAN_SOURCE_FILE}"; then
-            echo -e "${SUCCESS} 成功更改系统软件源！"
-            return 0
-        fi
-        comment_source_file "${DEBIAN_SOURCE_FILE}"
+    if ! disable_deb822_source_if_needed "${DEBIAN_SOURCE_FILE}"; then
+        return 0
     fi
 
-    if [[ -f "${UBUNTU_SOURCE_FILE}" ]]; then
-        if ! grep -q '^[^#]' "${UBUNTU_SOURCE_FILE}"; then
-            echo -e "${SUCCESS} 成功更改系统软件源！"
-            return 0
-        fi
-        comment_source_file "${UBUNTU_SOURCE_FILE}"
+    if ! disable_deb822_source_if_needed "${UBUNTU_SOURCE_FILE}"; then
+        return 0
     fi
 
     echo -e "${SUCCESS} 成功更改系统软件源！"
@@ -234,24 +260,12 @@ select_mirror_site() {
     echo -e "${INFO} 您选择的源对应序号：[\033[92m ${source_id} \033[0m]"
 
     case "${source_id}" in
-        0)
-            restore_default_sources
-            ;;
-        1)
-            MIRROR_URL="mirrors.cernet.edu.cn"
-            ;;
-        2)
-            MIRROR_URL="mirrors.ustc.edu.cn"
-            ;;
-        3)
-            MIRROR_URL="mirrors.bfsu.edu.cn"
-            ;;
-        4)
-            MIRROR_URL="mirrors.tuna.tsinghua.edu.cn"
-            ;;
-        5)
-            MIRROR_URL="mirrors.aliyun.com"
-            ;;
+        0) restore_default_sources ;;
+        1) MIRROR_URL="mirrors.cernet.edu.cn" ;;
+        2) MIRROR_URL="mirrors.ustc.edu.cn" ;;
+        3) MIRROR_URL="mirrors.bfsu.edu.cn" ;;
+        4) MIRROR_URL="mirrors.tuna.tsinghua.edu.cn" ;;
+        5) MIRROR_URL="mirrors.aliyun.com" ;;
     esac
 
     change_source_list
@@ -291,7 +305,7 @@ disable_source_file() {
     local source_file="${2}"
     local choice
 
-    [[ -f "${source_file}" ]] || error "未找到 ${label} 源文件：${source_file}"
+    [[ -f "${source_file}" ]] || die "未找到 ${label} 源文件：${source_file}"
 
     read -r -p "$(echo -ne "${OPTIONS} 是否注释 ${label} 源？[\033[92mY\033[0m/n]：")" choice
     case "${choice}" in
@@ -299,11 +313,11 @@ disable_source_file() {
             echo -e "${INFO} 保持当前状态，不进行注释！"
             ;;
         *)
-            if ! grep -q '^[^#]' "${source_file}"; then
+            if ! has_active_lines "${source_file}"; then
                 echo -e "${INFO} ${label} 源已注释，无需修改！"
                 return 0
             fi
-            sed -i 's/^[^#]/#&/' "${source_file}"
+            comment_active_lines "${source_file}"
             echo -e "${SUCCESS} 成功注释 [\033[92m ${label} \033[0m] 源！"
             ;;
     esac
@@ -311,7 +325,7 @@ disable_source_file() {
 
 main() {
     check_dependencies
-    check_root
+    require_root
     load_release_info
     backup_source_list
     system_source_manage
