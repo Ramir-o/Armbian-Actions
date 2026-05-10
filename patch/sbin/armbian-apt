@@ -29,6 +29,23 @@ error() {
     exit 1
 }
 
+require_command() {
+    command -v "${1}" >/dev/null 2>&1 || error "缺少依赖命令：[\033[92m ${1} \033[0m]"
+}
+
+check_dependencies() {
+    local cmd
+    local required_commands=(cp grep id rm sed)
+
+    for cmd in "${required_commands[@]}"; do
+        require_command "${cmd}"
+    done
+}
+
+check_root() {
+    [[ "$(id -u)" -eq 0 ]] || error "请使用 root 用户运行！"
+}
+
 prompt_yes_no() {
     local prompt="${1}"
     local default="${2:-y}"
@@ -293,6 +310,8 @@ disable_source_file() {
 }
 
 main() {
+    check_dependencies
+    check_root
     load_release_info
     backup_source_list
     system_source_manage

@@ -23,6 +23,36 @@ error() {
     exit 1
 }
 
+require_command() {
+    command -v "${1}" >/dev/null 2>&1 || error "缺少依赖命令：[\033[92m ${1} \033[0m]"
+}
+
+check_dependencies() {
+    local cmd
+    local required_commands=(
+        apt
+        awk
+        cat
+        chmod
+        cp
+        curl
+        cut
+        grep
+        id
+        ip
+        rm
+        sed
+        sort
+        systemctl
+        tr
+        uname
+    )
+
+    for cmd in "${required_commands[@]}"; do
+        require_command "${cmd}"
+    done
+}
+
 prompt_yes_no() {
     local prompt="${1}"
     local default="${2:-y}"
@@ -330,6 +360,7 @@ set_hostname() {
     read -r -p "$(echo -e "${OPTIONS} 自定义主机名（回车跳过）：")" new_hostname_choice
 
     if [[ -n "${new_hostname_choice}" ]]; then
+        require_command hostnamectl
         hostnamectl set-hostname "${new_hostname_choice}"
         echo -e "${SUCCESS} 主机名已更改为：[\e[1;32m ${new_hostname_choice} \e[0m]"
     else
@@ -551,6 +582,7 @@ prompt_reboot() {
 }
 
 main() {
+    check_dependencies
     check_env
     check_select_interface
     detect_network_info

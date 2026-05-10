@@ -22,6 +22,48 @@ error() {
     exit 1
 }
 
+require_command() {
+    command -v "${1}" >/dev/null 2>&1 || error "缺少依赖命令：[\033[92m ${1} \033[0m]"
+}
+
+check_grep_pcre() {
+    echo "1.2.3" | grep -oP '^[0-9]+\.[0-9]+' >/dev/null 2>&1 ||
+        error "当前 grep 不支持 -P 参数，请安装 GNU grep！"
+}
+
+check_dependencies() {
+    local cmd
+    local required_commands=(
+        apt-get
+        awk
+        basename
+        curl
+        cut
+        dpkg
+        dpkg-query
+        find
+        grep
+        id
+        mktemp
+        sed
+        shuf
+        sort
+        tail
+        tar
+        wget
+    )
+
+    for cmd in "${required_commands[@]}"; do
+        require_command "${cmd}"
+    done
+
+    check_grep_pcre
+}
+
+check_root() {
+    [[ "$(id -u)" -eq 0 ]] || error "请使用 root 用户运行！"
+}
+
 prompt_yes_no() {
     local prompt="${1}"
     local default="${2:-y}"
@@ -57,15 +99,19 @@ load_system_info() {
 }
 
 create_temp_dir() {
+    ORIGINAL_DIR=$(pwd)
     TEMP_DIR=$(mktemp -d)
     [[ -d "${TEMP_DIR}" ]] || error "无法创建临时目录！"
+    trap cleanup_temp_dir EXIT
     echo -e "${STEPS} 创建临时目录：[\033[92m ${TEMP_DIR} \033[0m]"
 }
 
 cleanup_temp_dir() {
+    trap - EXIT
+    [[ -n "${ORIGINAL_DIR}" && -d "${ORIGINAL_DIR}" ]] && cd "${ORIGINAL_DIR}" >/dev/null 2>&1 || true
     [[ -n "${TEMP_DIR}" && -d "${TEMP_DIR}" ]] || return 0
-    cd - >/dev/null 2>&1 || true
     rm -rf "${TEMP_DIR}"
+    TEMP_DIR=""
     echo -e "${SUCCESS} 临时目录已删除！"
 }
 
@@ -292,11 +338,14 @@ parse_args() {
 }
 
 main() {
+    check_dependencies
     load_system_info
     parse_args "$@"
 
     echo -e "${INFO} 当前系统信息：[\033[92m ${BOARD} \033[0m] [\033[92m ${VERSION_CODENAME} \033[0m] [\033[92m ${OS_BRANCH} \033[0m]"
     echo -e "${INFO} 当前系统版本：[\033[92m ${ARMBIAN_VERSION} \033[0m]"
+
+    check_root
 
     [[ "${SKIP_FILE_CHECK}" == true ]] || check_and_install_file
 

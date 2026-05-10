@@ -19,6 +19,23 @@ error() {
     exit 1
 }
 
+require_command() {
+    command -v "${1}" >/dev/null 2>&1 || error "缺少依赖命令：[\033[92m ${1} \033[0m]"
+}
+
+check_dependencies() {
+    local cmd
+    local required_commands=(basename chmod curl id jq mktemp mv uname)
+
+    for cmd in "${required_commands[@]}"; do
+        require_command "${cmd}"
+    done
+}
+
+check_root() {
+    [[ "$(id -u)" -eq 0 ]] || error "请使用 root 用户运行！"
+}
+
 create_temp_dir() {
     TEMP_DIR=$(mktemp -d) || error "创建临时目录失败！"
     trap 'rm -rf "${TEMP_DIR}"' EXIT
@@ -79,6 +96,8 @@ sync_scripts() {
 }
 
 main() {
+    check_dependencies
+    check_root
     create_temp_dir
     load_system_info
     get_remote_scripts
