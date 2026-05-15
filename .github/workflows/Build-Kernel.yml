@@ -146,7 +146,9 @@ jobs:
             ls -1 "/mnt/workdir/build/output/debs"
             exit 1
           fi
-          matching_files_array=($(ls linux-dtb* linux-headers* linux-image* linux-libc* 2>/dev/null))
+          shopt -s nullglob
+          matching_files_array=(linux-dtb*.deb linux-headers*.deb linux-image*.deb linux-libc*.deb)
+          shopt -u nullglob
           if [ ${#matching_files_array[@]} -gt 0 ]; then
             renamed_files=()
             for f in "${matching_files_array[@]}"; do
