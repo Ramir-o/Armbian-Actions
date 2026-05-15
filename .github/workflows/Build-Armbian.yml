@@ -20,6 +20,7 @@ on:
           - 'jp-tvbox'
           - 'nanopi-r3s'
           - 'onecloud'
+          - 'uefi-x86'
       BRANCH:
         description: 'Kernel branch'
         default: 'current'
