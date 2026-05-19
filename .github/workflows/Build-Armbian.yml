@@ -153,6 +153,7 @@ jobs:
         run: |
           "${GITHUB_WORKSPACE}/scripts/apply_patches.sh"
           "${GITHUB_WORKSPACE}/scripts/rename_to_conf.sh"
+          bash "${GITHUB_WORKSPACE}/scripts/patch_mknod_ubuntu26.sh"
 
       - name: Compile Armbian [ ${{ inputs.BOARD }} ${{ inputs.BRANCH }} ${{ inputs.RELEASE }} ]
         working-directory: /mnt/workdir/build
