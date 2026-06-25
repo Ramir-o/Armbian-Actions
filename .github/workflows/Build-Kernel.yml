@@ -33,9 +33,9 @@ on:
         type: choice
         options:
           - 'ubuntu-24.04-arm'
-		  - 'ubuntu-26.04-arm'
+          - 'ubuntu-26.04-arm'
           - 'ubuntu-24.04'
-		  - 'ubuntu-26.04'
+          - 'ubuntu-26.04'
 
 env:
   TZ: Asia/Shanghai
