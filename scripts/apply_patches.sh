@@ -97,6 +97,11 @@ if [[ "${BRANCH}" =~ ^(legacy)$ ]]; then
   cp -f ${GITHUB_WORKSPACE}/patch/test/legacy/config/* config/kernel/
 fi
 
+# Uefi-arm64 Patches
+echo "Copying Uefi-arm64 patches..."
+cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-6.18/
+cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-7.1/
+
 # T4 Patches
 echo "Copying T4 patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.18/
