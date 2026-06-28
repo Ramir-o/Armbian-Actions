@@ -155,6 +155,8 @@ jobs:
           
           # meson64
           cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1.patch patch/kernel/archive/meson64-7.2/ || true
+          rm -f patch/kernel/archive/meson64-7.2/general-meson-aiu-Fix-HDMI-codec-control-selection.patch
+          rm -f patch/kernel/archive/meson64-7.2/hwmon-emc2305-fixups-for-driver.patch
 
           # rockchip64
           cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-7.2/ || true
