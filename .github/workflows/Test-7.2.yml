@@ -150,6 +150,9 @@ jobs:
             sed -i "s|7\.2-rc[1-8]|7\.2-rc${{ inputs.RC_VERSION }}|g" config/sources/mainline-kernel.conf.sh
           fi
 
+          cp -a patch/kernel/archive/meson64-7.1 patch/kernel/archive/meson64-7.2
+          cp -a patch/kernel/archive/rockchip64-7.1 patch/kernel/archive/rockchip64-7.2
+          
           # meson64
           cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1.patch patch/kernel/archive/meson64-7.2/ || true
 
