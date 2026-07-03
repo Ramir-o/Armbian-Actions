@@ -44,7 +44,6 @@ on:
           - 'ubuntu-24.04'
           - 'ubuntu-26.04'
 
-
 jobs:
   build:
     runs-on: ${{ inputs.runner_label }}
@@ -59,7 +58,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
 
       - name: Initialize environment
         env:
@@ -166,6 +165,7 @@ jobs:
           docker run -d --name pve-${{ inputs.build_branch }}-builder \
             --user 0:0 \
             -v "${BUILD_ROOT}:/workspaces/pve" \
+            -v /etc/localtime:/etc/localtime:ro \
             -w /workspaces/pve \
             pve-${{ inputs.build_branch }}-builder:trixie \
             sleep infinity
