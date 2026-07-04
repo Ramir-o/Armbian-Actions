@@ -11,6 +11,8 @@ on:
         options:
           - 'meson64'
           - 'rockchip64'
+          - 'arm64'
+          - 'x86'
       BRANCH:
         description: 'Linux Branch'
         default: 'bleedingedge'
@@ -159,6 +161,9 @@ jobs:
           cp -f ${GITHUB_WORKSPACE}/patch/X2/rk3566-panther-x2.dts patch/kernel/archive/rockchip64-7.2/dt/ || true
           cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rockchip64-7.2/dt/ || true
 
+          # uefi-arm64
+          cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-7.2/  || true
+
       - name: Compile Kernel [ ${{ inputs.LinuxFamily }} ${{ inputs.BRANCH }} ] [ rc${{ inputs.RC_VERSION }} ]
         working-directory: /mnt/workdir/build
         run: |
@@ -166,6 +171,8 @@ jobs:
           case "${BoardFamily}" in
             rockchip64) BoardFamily="nanopct4" ;;
             meson64)    BoardFamily="aml-s9xx-box" ;;
+            arm64)      BoardFamily="uefi-arm64" ;;
+            x86)        BoardFamily="uefi-x86" ;;
           esac
           ./compile.sh kernel BOARD=${BoardFamily} BRANCH=${{ inputs.BRANCH }} EXTRAWIFI=${{ inputs.EXTRAWIFI }} CPUTHREADS=${{ inputs.CPUTHREADS }} PREFER_DOCKER=yes DOCKER_ARMBIAN_BASE_IMAGE=ubuntu:resolute DEB_COMPRESS=xz SHARE_LOG=yes
 
