@@ -97,6 +97,10 @@ if [[ "${BRANCH}" =~ ^(legacy)$ ]]; then
   cp -f ${GITHUB_WORKSPACE}/patch/test/legacy/config/* config/kernel/
 fi
 
+# Uefi-arm64 Patches
+cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-6.18/
+cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-7.1/
+
 # T4 Patches
 echo "Copying T4 patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-6.18/
@@ -113,8 +117,8 @@ cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan-5c.patch patch/kernel/rk35xx-vendor-6.
 # 5T Patches
 echo "Copying 5T patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/5T/* patch/kernel/rk35xx-vendor-6.1/
-sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/zane-e/linux-rockchip.git|g' config/sources/families/rk35xx.conf
-sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/zane-e/linux-rockchip.git|g' config/sources/families/rockchip-rk3588.conf
+sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/ramir-o/linux-rockchip.git|g' config/sources/families/rk35xx.conf
+sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/ramir-o/linux-rockchip.git|g' config/sources/families/rockchip-rk3588.conf
 
 # N1 Patches
 echo "Copying N1 patches..."
