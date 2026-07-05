@@ -75,7 +75,6 @@ jobs:
           sudo rm -f /swapfile /mnt/swapfile
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* moby* snapd* android* || true
           sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get -qq clean
           sudo -E apt-get clean
           sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
           sudo rm -rf ~/{.cargo,.dotnet,.rustup}
@@ -188,7 +187,6 @@ jobs:
           fi
 
       - name: List outputs
-        if: always()
         shell: bash
         run: |
           set -euxo pipefail
@@ -196,7 +194,6 @@ jobs:
           ls -lah "${BUILD_ROOT}/logs/pve-${{ inputs.build_branch }}" || true
 
       - name: Prepare release archives
-        if: always()
         shell: bash
         env:
           INPUT_RELEASE_TAG: ${{ inputs.release_tag || '' }}
@@ -227,7 +224,7 @@ jobs:
           } >> "${GITHUB_ENV}"
 
       - name: Upload release archives
-        if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.upload_release == 'yes' }}
+        if: ${{ inputs.upload_release == 'yes' }}
         uses: ophub/upload-to-releases@main
         with:
           tag: "${{ env.RELEASE_TAG }}"
