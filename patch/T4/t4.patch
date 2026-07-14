@@ -9,6 +9,15 @@
 
  / {
  	aliases {
+@@ -692,6 +692,8 @@
+ &uart0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart0_xfer &uart0_rts &uart0_cts>;
++	dmas = <&dmac_peri 0>, <&dmac_peri 1>;
++	dma-names = "tx", "rx";
+ 	status = "okay";
+ 
+ 	bluetooth {
 
 --- a/arch/arm64/boot/dts/rockchip/rk3399-base.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-base.dtsi
