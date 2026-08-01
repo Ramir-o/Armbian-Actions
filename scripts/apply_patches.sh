@@ -138,6 +138,9 @@ cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rock
 cp -f ${GITHUB_WORKSPACE}/patch/JP/rk3566-jp-tvbox.dts patch/kernel/archive/rockchip64-7.1/dt/
 cp -f ${GITHUB_WORKSPACE}/patch/JP/dt/rk3566-jp-tvbox.dts patch/kernel/rk35xx-vendor-6.1/dt/
 
+# radxa-cubie-a5e Uboot Patches for 1G ram
+cp -f ${GITHUB_WORKSPACE}/patch/A5E/edit-dram-parameters.patch patch/u-boot/v2026.01/board_radxa-cubie-a5e/
+
 # Re-enable Meson for the new kernel
 sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
 rm -f patch/kernel/archive/meson-6.12/0052-drm-meson-Describe-the-HDMI-PHY-frequency-limits-of-.patch
