@@ -240,8 +240,7 @@ detect_network_info() {
 
 confirm_source() {
     echo -e "${INFO} 请确认系统已更换为国内镜像软件源！"
-    echo -e "${INFO} 网络环境可以稳定访问官方源，可忽略！"
-    echo -e "${INFO} 图文教程参考：[\033[92m https://zhou.pp.ua \033[0m]"
+    echo -e "${INFO} 网络环境可以稳定访问官方源，输入 Y 忽略！"
 
     if prompt_yes_no "${OPTIONS} 是否已更换为国内源？[y/\033[92mN\033[0m]：" "n"; then
         return 0
@@ -297,15 +296,15 @@ setup_repositories_lierfang() {
     country=${country:-UNKNOWN}
 
     declare -A mirrors
-    mirrors[CN]="https://ah1.mirrors.lierfang.com:8000"
+    mirrors[CN]="https://cn.mirrors.lierfang.com"
     mirrors[JP]="https://jp.mirrors.lierfang.com"
-    mirrors[DE]="https://de.mirrors.lierfang.com"
+    mirrors[US]="https://us.mirrors.lierfang.com"
     mirrors[DEFAULT]="https://mirrors.lierfang.com"
 
     case "${country}" in
         CN) primary="${mirrors[CN]}"; region="China" ;;
         JP) primary="${mirrors[JP]}"; region="Japan" ;;
-        DE) primary="${mirrors[DE]}"; region="Germany" ;;
+        US) primary="${mirrors[US]}"; region="America" ;;
         UNKNOWN|*) primary="${mirrors[DEFAULT]}"; region="Cloudflare" ;;
     esac
 
@@ -329,14 +328,14 @@ setup_repositories_lierfang() {
 
         if [[ -z "${mirror}" ]]; then
             echo -e "${INFO} 尝试备用源..."
-            for src in "${mirrors[CN]}" "${mirrors[JP]}" "${mirrors[DE]}"; do
+            for src in "${mirrors[CN]}" "${mirrors[JP]}" "${mirrors[US]}"; do
                 [[ "${src}" == "${primary}" ]] && continue
                 if url_available "${src}/pxcloud/" 3; then
                     mirror="${src}"
                     case "${src}" in
                         "${mirrors[CN]}") region="China" ;;
                         "${mirrors[JP]}") region="Japan" ;;
-                        "${mirrors[DE]}") region="Germany" ;;
+                        "${mirrors[US]}") region="America" ;;
                     esac
                     echo -e "${INFO} 找到可用备用源 → 使用：\033[95m${region} (${mirror})\033[0m"
                     break
