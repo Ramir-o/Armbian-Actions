@@ -101,7 +101,7 @@ jobs:
           sudo -E apt-get clean
           sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
           sudo rm -rf ~/{.cargo,.dotnet,.rustup}
-          sudo timedatectl set-timezone "${TZ}"
+          sudo ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime
 
       - name: Create simulated physical disk
         id: disk
