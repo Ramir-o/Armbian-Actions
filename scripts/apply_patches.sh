@@ -114,8 +114,11 @@ cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan-5c.patch patch/kernel/rk35xx-vendor-6.
 # 5T Patches
 echo "Copying 5T patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/5T/* patch/kernel/rk35xx-vendor-6.1/
-sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/zane-e/linux-rockchip.git|g' config/sources/families/rk35xx.conf
-sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/zane-e/linux-rockchip.git|g' config/sources/families/rockchip-rk3588.conf
+sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/ramir-o/linux-rockchip.git|g' config/sources/families/rk35xx.conf
+sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/ramir-o/linux-rockchip.git|g' config/sources/families/rockchip-rk3588.conf
+sed -i 's/rk-6\.1-rkr5\.1/rk-6.1-rkr7.2/g; s/v6\.1\.115/v6.1.172/g' patch/kernel/rk35xx-vendor-6.1/0000.patching_config.yaml
+sed -i 's/branch:rk-6\.1-rkr5\.1/branch:rk-6.1-rkr7.2/g' config/sources/families/rockchip-rk3588.conf
+sed -i 's/branch:rk-6\.1-rkr5\.1/branch:rk-6.1-rkr7.2/g' config/sources/families/rk35xx.conf
 
 # N1 Patches
 echo "Copying N1 patches..."
