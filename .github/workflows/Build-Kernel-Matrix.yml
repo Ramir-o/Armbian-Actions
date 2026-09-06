@@ -156,6 +156,7 @@ jobs:
           BoardFamily=${{ matrix.linux_family }}
           case "${BoardFamily}" in
             rockchip64) BoardFamily="nanopct4" ;;
+            sc8280xp)   BoardFamily="radxa-dragon-q8b" ;;
             meson64)    BoardFamily="aml-s9xx-box" ;;
             sunxi64)    BoardFamily="radxa-cubie-a5e" ;;
             rk35xx)     BoardFamily="rock-5c" ;;
