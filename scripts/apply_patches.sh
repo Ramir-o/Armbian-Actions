@@ -183,6 +183,8 @@ sed -i 's|1800000|1992000|g' config/sources/families/include/rockchip64_common.i
 # Append TZ environment variable to Docker (e.g. Asia/Shanghai)
 sed -i '/"--env" "TERM=\${TERM}"/a\		"--env" "TZ=${TZ:-Asia/Shanghai}"' lib/functions/host/docker.sh
 
+sed -i 's|tag:v7.2.3|tag:v7.2.4|g' config/sources/families/sc8280xp.conf
+
 # Remove Actions warnings
 sed -i '252{/else/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '253{/display_alert/s/^/#/}' lib/functions/cli/utils-cli.sh
