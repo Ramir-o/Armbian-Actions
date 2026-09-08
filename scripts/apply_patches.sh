@@ -146,7 +146,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/a
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
 sed -i '475a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-6.18/series.conf
 sed -i '585a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-7.2/series.conf
-rm -f patch/kernel/archive/sunxi-7.2/patches.megous/fixes-7.2/0026-clocksource-drivers-sun4i-Never-program-a-zero-inter.patch
+cp -f ${GITHUB_WORKSPACE}/patch/A5E/0026-clocksource-drivers-sun4i-Never-program-a-zero-inter.patch patch/kernel/archive/sunxi-7.2/patches.megous/fixes-7.2/
 
 # Uefi-arm64 Patches
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-6.18/
