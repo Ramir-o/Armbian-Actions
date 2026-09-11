@@ -7,7 +7,7 @@
 -		cooling-levels = <0 64 128 192 255>;
 -		pwms = <&pwm1 0 60000 0>;
 +		cooling-levels = <0 100 140 190 225 255>;
-+		pwms = <&pwm1 0 50000 0>;
++		pwms = <&pwm1 0 60000 0>;
 +		rockchip,temp-trips = <
 +			45000   1
 +			55000   2
