@@ -152,6 +152,10 @@ cp -f ${GITHUB_WORKSPACE}/patch/A5E/0026-clocksource-drivers-sun4i-Never-program
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-6.18/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-7.2/
 
+# Q8B Patches
+cp -f ${GITHUB_WORKSPACE}/patch/Q8B/0064-net-stmmac-tc956x-select-MAC-speed-before-PMA-init.patch patch/kernel/archive/sc8280xp-edge/
+sed -i 's|tag:v7.2.3|tag:v7.2.5|g' config/sources/families/sc8280xp.conf
+
 # Re-enable Meson for the new kernel
 sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
 rm -f patch/kernel/archive/meson-6.12/0052-drm-meson-Describe-the-HDMI-PHY-frequency-limits-of-.patch
@@ -184,13 +188,12 @@ sed -i 's|1800000|1992000|g' config/sources/families/include/rockchip64_common.i
 # Append TZ environment variable to Docker (e.g. Asia/Shanghai)
 sed -i '/"--env" "TERM=\${TERM}"/a\		"--env" "TZ=${TZ:-Asia/Shanghai}"' lib/functions/host/docker.sh
 
-sed -i 's|tag:v7.2.3|tag:v7.2.4|g' config/sources/families/sc8280xp.conf
-
 # Remove Actions warnings
 sed -i '252{/else/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '253{/display_alert/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '272{/display_alert/s/^/#/}' lib/functions/cli/utils-cli.sh
 sed -i '383{/display_alert/s/^/#/}' lib/functions/main/config-prepare.sh
+sed -i '58{/display_alert/s/^/#/}' lib/functions/general/git-oras-tree.sh
 sed -i '/display_alert "ORAS manifest fetch error"/c\		:' lib/functions/general/oci-oras.sh
 [ ! -d userpatches/extensions ] && mkdir -p userpatches/extensions
 
