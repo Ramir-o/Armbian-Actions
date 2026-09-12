@@ -788,7 +788,7 @@ new = r'''        {
                     // Patch for some kernels not match (date).
                     buildDate = kernel.version ?? 'unknown';
                 }
-                return `${kernel.sysname} ${kernel.release} ( ${buildDate} )`;
+                return `${kernel.sysname} ${kernel.release} (${buildDate})`;
             },
             value: '',
         },'''
