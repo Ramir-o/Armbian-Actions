@@ -9,7 +9,7 @@ on:
         default: 'rockchip64'
         type: string
       BRANCH:
-        description: 'Linux Branch（逗号分隔，例如 current,edge,legacy,vendor,flippy）'
+        description: 'Linux Branch（逗号分隔，例如 current,edge,legacy,vendor）'
         default: 'current'
         required: true
         type: string
@@ -159,6 +159,7 @@ jobs:
             sc8280xp)   BoardFamily="radxa-dragon-q8b" ;;
             meson64)    BoardFamily="aml-s9xx-box" ;;
             sunxi64)    BoardFamily="radxa-cubie-a5e" ;;
+            sc8280xp)   BoardFamily="radxa-dragon-q8b" ;;
             rk35xx)     BoardFamily="rock-5c" ;;
             arm64)      BoardFamily="uefi-arm64" ;;
             meson)      BoardFamily="onecloud" ;;
