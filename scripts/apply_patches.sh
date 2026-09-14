@@ -145,7 +145,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/A5E/sunxi-dram-a523-alternative-parameters.patch
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-6.18/patches.armbian/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
 sed -i '475a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-6.18/series.conf
-sed -i '585a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-7.2/series.conf
+sed -i '585a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-7.2/series.conf0044-drm-msm-dsi-Dro
 
 # Uefi-arm64 Patches
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-6.18/
@@ -154,6 +154,10 @@ cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/a
 # Q8B Patches
 cp -f ${GITHUB_WORKSPACE}/patch/Q8B/0064-net-stmmac-tc956x-select-MAC-speed-before-PMA-init.patch patch/kernel/archive/sc8280xp-edge/
 sed -i 's|tag:v7.2.3|tag:v7.2.6|g' config/sources/families/sc8280xp.conf
+rm -f patch/kernel/archive/sc8280xp-edge/0042-drm-msm-dpu-Drop-sneaky-dev_pm_opp_set_rate-0.patch
+rm -f patch/kernel/archive/sc8280xp-edge/0044-drm-msm-dsi-Drop-dev_pm_opp_set_rate-0.patch
+rm -f patch/kernel/archive/sc8280xp-edge/0045-drm-msm-dp-Drop-dev_pm_opp_set_rate-0.patch
+rm -f patch/kernel/archive/sc8280xp-edge/0063-thermal-qcom-adc-tm5-drop-stale-return-check.patch
 
 # Re-enable Meson for the new kernel
 sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
