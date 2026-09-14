@@ -145,7 +145,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/A5E/sunxi-dram-a523-alternative-parameters.patch
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-6.18/patches.armbian/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
 sed -i '475a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-6.18/series.conf
-sed -i '585a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-7.2/series.conf0044-drm-msm-dsi-Dro
+sed -i '585a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-7.2/series.conf
 
 # Uefi-arm64 Patches
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-6.18/
