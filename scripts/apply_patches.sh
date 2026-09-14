@@ -153,7 +153,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/a
 
 # Q8B Patches
 cp -f ${GITHUB_WORKSPACE}/patch/Q8B/0064-net-stmmac-tc956x-select-MAC-speed-before-PMA-init.patch patch/kernel/archive/sc8280xp-edge/
-sed -i 's|tag:v7.2.3|tag:v7.2.5|g' config/sources/families/sc8280xp.conf
+sed -i 's|tag:v7.2.3|tag:v7.2.6|g' config/sources/families/sc8280xp.conf
 
 # Re-enable Meson for the new kernel
 sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
