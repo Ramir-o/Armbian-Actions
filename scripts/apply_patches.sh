@@ -140,16 +140,13 @@ cp -f ${GITHUB_WORKSPACE}/patch/JP/dt/rk3566-jp-tvbox.dts patch/kernel/rk35xx-ve
 cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/rockchip64-6.18/dt/
 cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/rockchip64-7.2/dt/
 
-# Radxa-cubie-a5e Patches for 1G ram
-cp -f ${GITHUB_WORKSPACE}/patch/A5E/edit-dram-parameters.patch patch/u-boot/v2026.01/board_radxa-cubie-a5e/
+# Radxa-cubie-a5e
+cp -f ${GITHUB_WORKSPACE}/patch/A5E/sunxi-dram-a523-alternative-parameters.patch patch/u-boot/v2026.07-sunxi64/board_radxa-cubie-a5e/
+cp -f ${GITHUB_WORKSPACE}/patch/A5E/7002-clk-and-dts-sun55i-a523.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-6.18/patches.armbian/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
 sed -i '475a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-6.18/series.conf
 sed -i '585a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-7.2/series.conf
-
-# Uefi-arm64 Patches
-cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-6.18/
-cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/uefi-arm64-7.2/
 
 # Re-enable Meson for the new kernel
 sed -i '28s/^/#/' config/sources/families/include/meson_common.inc
