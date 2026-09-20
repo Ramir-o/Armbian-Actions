@@ -83,7 +83,7 @@ env:
 
 jobs:
   Prepare-Matrix:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
       count: ${{ steps.matrix.outputs.count }}
@@ -365,7 +365,7 @@ jobs:
     needs:
       - Prepare-Matrix
       - Build-Armbian
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       actions: write
     steps:
