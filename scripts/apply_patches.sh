@@ -141,7 +141,11 @@ cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/roc
 cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/rockchip64-7.2/dt/
 
 cp -f ${GITHUB_WORKSPACE}/patch/Q8B/* patch/kernel/archive/sc8280xp-edge/
-sed -i 's|tag:v7.2.3|tag:v7.2.6|g' config/sources/families/sc8280xp.conf
+sed -i 's|tag:v7.2.3|tag:v7.2.7|g' config/sources/families/sc8280xp.conf
+rm -f patch/kernel/archive/sc8280xp-edge/0042-drm-msm-dpu-Drop-sneaky-dev_pm_opp_set_rate-0.patch
+rm -f patch/kernel/archive/sc8280xp-edge/0044-drm-msm-dsi-Drop-dev_pm_opp_set_rate-0.patch
+rm -f patch/kernel/archive/sc8280xp-edge/0045-drm-msm-dp-Drop-dev_pm_opp_set_rate-0.patch
+rm -f patch/kernel/archive/sc8280xp-edge/0063-thermal-qcom-adc-tm5-drop-stale-return-check.patch
 
 # Radxa-cubie-a5e
 cp -f ${GITHUB_WORKSPACE}/patch/A5E/7002-clk-and-dts-sun55i-a523.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
