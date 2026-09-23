@@ -140,7 +140,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/JP/dt/rk3566-jp-tvbox.dts patch/kernel/rk35xx-ve
 cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/rockchip64-6.18/dt/
 cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/rockchip64-7.2/dt/
 
-cp -f ${GITHUB_WORKSPACE}/patch/Q8B patch/kernel/archive/sc8280xp-edge/
+cp -f ${GITHUB_WORKSPACE}/patch/Q8B/* patch/kernel/archive/sc8280xp-edge/
 sed -i 's|tag:v7.2.3|tag:v7.2.7|g' config/sources/families/sc8280xp.conf
 
 # Radxa-cubie-a5e
