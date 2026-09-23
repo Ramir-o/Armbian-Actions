@@ -141,7 +141,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/roc
 cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/rockchip64-7.2/dt/
 
 cp -f ${GITHUB_WORKSPACE}/patch/Q8B/* patch/kernel/archive/sc8280xp-edge/
-sed -i 's|tag:v7.2.3|tag:v7.2.7|g' config/sources/families/sc8280xp.conf
+sed -i 's|tag:v7.2.3|tag:v7.2.6|g' config/sources/families/sc8280xp.conf
 
 # Radxa-cubie-a5e
 cp -f ${GITHUB_WORKSPACE}/patch/A5E/7002-clk-and-dts-sun55i-a523.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
