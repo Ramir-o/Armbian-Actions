@@ -143,8 +143,10 @@ cp -f ${GITHUB_WORKSPACE}/patch/TVI/rk3399-tvi3315a.dts patch/kernel/archive/roc
 # Radxa-cubie-a5e
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-6.18/patches.armbian/
 cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
+cp -f ${GITHUB_WORKSPACE}/patch/A5E/add-LED-aliases-to-Cubie-A5E.patch patch/kernel/archive/sunxi-7.2/patches.armbian/
 sed -i '475a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-6.18/series.conf
 sed -i '585a patches.armbian/fix-CPU-information-6.16.patch' patch/kernel/archive/sunxi-7.2/series.conf
+sed -i '586a patches.armbian/add-LED-aliases-to-Cubie-A5E.patch' patch/kernel/archive/sunxi-7.2/series.conf
 
 # Radxa-dragon-q8b
 sed -i '45d' config/sources/families/sc8280xp.conf
