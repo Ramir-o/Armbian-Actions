@@ -112,4 +112,6 @@ sed -i '/display_alert "ORAS manifest fetch error"/c\		:' lib/functions/general/
 # Format: YY.MM.1 (e.g. 25.11.1)
 echo "$(date +%y).$(date +%m).1" > VERSION
 
+sed -i "s|7\.3-rc[1-8]|7\.3|g" config/sources/mainline-kernel.conf.sh
+
 echo "Patches applied successfully."
