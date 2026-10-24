@@ -2,22 +2,25 @@ diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconf
 index 428a4c2e21d0..0b375bf038bd 100644
 --- a/drivers/input/touchscreen/Kconfig
 +++ b/drivers/input/touchscreen/Kconfig
-@@ -1453,5 +1453,5 @@ config TOUCHSCREEN_ZINITIX
- 	  module will be called zinitix.
+@@ -1457,6 +1457,7 @@
+ 	  module will be called himax_hx83112b.
  
  source "drivers/input/touchscreen/hxchipset/Kconfig"
--
 +source "drivers/input/touchscreen/sec_ts/Kconfig"
- endif
+ source "drivers/input/touchscreen/gtx8/Kconfig"
+ 
+ config TOUCHSCREEN_RASPITS_FT5426
 diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
 index 339b262973fb..f18238134f3c 100644
 --- a/drivers/input/touchscreen/Makefile
 +++ b/drivers/input/touchscreen/Makefile
-@@ -134,3 +134,4 @@ obj-$(CONFIG_TOUCHSCREEN_RASPITS_FT5426)	+= raspits_ft5426.o
- obj-$(CONFIG_TOUCHSCREEN_IQS5XX)	+= iqs5xx.o
+@@ -134,5 +134,6 @@
  obj-$(CONFIG_TOUCHSCREEN_ZINITIX)	+= zinitix.o
+ obj-$(CONFIG_TOUCHSCREEN_HIMAX_HX83112B)	+= himax_hx83112b.o
  obj-$(CONFIG_TOUCHSCREEN_HIMAX_CHIPSET)	+= hxchipset/
-+obj-$(CONFIG_TOUCHSCREEN_SEC_TS_1223)		+= sec_ts/
++obj-$(CONFIG_TOUCHSCREEN_SEC_TS_1223)	+= sec_ts/
+ obj-$(CONFIG_TOUCHSCREEN_GOODIX_GTX8)	+= gtx8/
+ obj-$(CONFIG_TOUCHSCREEN_RASPITS_FT5426) += raspits_ft5426.o
 diff --git a/drivers/input/touchscreen/sec_ts/Kconfig b/drivers/input/touchscreen/sec_ts/Kconfig
 new file mode 100644
 index 000000000000..b54238744ee1
