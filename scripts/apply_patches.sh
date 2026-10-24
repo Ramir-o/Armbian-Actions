@@ -33,6 +33,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan-5c.patch patch/kernel/rk35xx-vendor-6.
 echo "Copying 5T patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/5T/* patch/kernel/rk35xx-vendor-6.1/
 cp -f ${GITHUB_WORKSPACE}/patch/5T/* patch/kernel/rk35xx-vendor-6.12/
+rm -f patch/kernel/rk35xx-vendor-6.12//0001-icmp-fix.patch
 sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/zane-e/linux-rockchip.git|g' config/sources/families/include/rockchip_vendor_common.inc
 
 # N1 Patches
