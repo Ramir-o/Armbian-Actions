@@ -32,6 +32,7 @@ cp -f ${GITHUB_WORKSPACE}/patch/5C/diyfan-5c.patch patch/kernel/rk35xx-vendor-6.
 # 5T Patches
 echo "Copying 5T patches..."
 cp -f ${GITHUB_WORKSPACE}/patch/5T/* patch/kernel/rk35xx-vendor-6.1/
+cp -f ${GITHUB_WORKSPACE}/patch/5T/* patch/kernel/rk35xx-vendor-6.12/
 sed -i 's|https://github.com/armbian/linux-rockchip.git|https://github.com/zane-e/linux-rockchip.git|g' config/sources/families/include/rockchip_vendor_common.inc
 
 # N1 Patches
