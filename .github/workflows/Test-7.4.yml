@@ -155,6 +155,12 @@ jobs:
           # meson64
           cp -a patch/kernel/archive/meson64-7.3 patch/kernel/archive/meson64-7.4
           cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1.patch patch/kernel/archive/meson64-7.4/ || true
+          rm -f patch/kernel/archive/meson64-7.4/board-odroidhc4-nor-hold-wp-pins.patch || true
+          rm -f patch/kernel/archive/meson64-7.4/board-odroidhc4-spi-nor-40mhz.patch || true
+          rm -f patch/kernel/archive/meson64-7.4/general-drm-panfrost-pin-runtime-PM.patch || true
+          rm -f patch/kernel/archive/meson64-7.4/general-irqchip-meson-gpio-allow-wakeup.patch || true
+          rm -f patch/kernel/archive/meson64-7.4/general-rtc-pcf8563-pass-driver-data-to-irq-handler.patch || true
+          rm -f patch/kernel/archive/meson64-7.4/general-stmmac-irq-shut-across-suspend.patch || true
 
           # rockchip64
           cp -a patch/kernel/archive/rockchip64-7.3 patch/kernel/archive/rockchip64-7.4
