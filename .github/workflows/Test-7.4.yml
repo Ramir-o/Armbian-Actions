@@ -153,11 +153,11 @@ jobs:
           fi
 
           # meson64
-          cp -f patch/kernel/archive/meson64-7.3 patch/kernel/archive/meson64-7.4
+          cp -a patch/kernel/archive/meson64-7.3 patch/kernel/archive/meson64-7.4
           cp -f ${GITHUB_WORKSPACE}/patch/N1/fix-n1.patch patch/kernel/archive/meson64-7.4/ || true
 
           # rockchip64
-          cp -f patch/kernel/archive/rockchip64-7.4 patch/kernel/archive/rockchip64-7.4
+          cp -a patch/kernel/archive/rockchip64-7.4 patch/kernel/archive/rockchip64-7.4
           cp -f ${GITHUB_WORKSPACE}/patch/T4/fix-CPU-information-6.16.patch patch/kernel/archive/rockchip64-7.4/ || true
           cp -f ${GITHUB_WORKSPACE}/patch/T4/t4.patch patch/kernel/archive/rockchip64-7.4/ || true
           cp -f ${GITHUB_WORKSPACE}/patch/X2/rk3566-panther-x2.dts patch/kernel/archive/rockchip64-7.4/dt/ || true
